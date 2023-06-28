@@ -81,19 +81,13 @@ WSGI_APPLICATION = 'telovendoproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'awake2023_grupo5',
+        'USER': 'grupo5',
+        'PASSWORD': 'adalid.2023',
+        'HOST': '45.173.130.120',
+        'PORT': '5432',
     }
-
-    # Descomentar para usar postgresql en vez de sqlite3
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'telovendo',
-    #     'USER': 'postgres',
-    #     'PASSWORD' : '123456',
-    #     'HOST' : 'localhost',
-    #     'PORT' : '5432',
-    # }
 }
 
 

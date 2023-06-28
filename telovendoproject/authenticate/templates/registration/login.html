@@ -21,9 +21,10 @@
                 <h2>Iniciar Sesión</h2>
                 <form action="" method="post">
                     {% csrf_token %}
-                    <input type="email" name="email" placeholder="Correo electrónico">
-                    <br>
-                    <input type="password" name="password" placeholder="Contraseña">
+                    {{ formulario_login.email.label }}
+                    {{ formulario_login.email }}
+                    {{ formulario_login.password.label }}
+                    {{ formulario_login.password }}
                     <br>
                     <input type="submit" value="Iniciar Sesión" class="btn btn-primary">
                     <a href="{% url 'register' %}" class="btn btn-secondary">Registrarse</a>
