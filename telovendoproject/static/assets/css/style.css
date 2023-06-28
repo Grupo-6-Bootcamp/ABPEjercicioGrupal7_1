@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+@import url('https://fonts.google.com/specimen/Inconsolata');
+
+
+
+.contenido {
+    height: 100%;
+    margin-bottom: auto;
+}
+
+.titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: rgb(19, 62, 80);
+    text-align: center;
+}
+
+.img-titulo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    width: 250px;
+}
+
+#sticky-footer {
+    background-color: #56738C;
+}
+
+#card-footer {
+    background-color: #56738C;
+    color: white;
+    border-color: #56738C;
+    align-items: center;
+    padding: 30px;
+}
+
+#brand {
+    font-weight: bold;
+    color: white;
+}
+
+.redes {
+    text-align: center;
+    padding: 20px;
+}
+
+.redesimg {
+    position: relative;
+    border-radius: 50%;
+    transition: 0.3s;
+    margin: 6px;
+}
+
+.redesimg:hover {
+    margin: 5px;
+    margin-right: 10px;
+    transform: scale(1.1, 1.1);
+    box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+nav div {
+    background-color: #91C2ED;
+}
+
+.botoncito {
+    color: white;
+    list-style: none;
+    background-color: #8ABAE3;
+    border-radius: 8px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+    margin-right: 5px
+}
+
+.botoncito:hover {
+    background-color: #70a8da;
+    box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.8);
+    transform: scale(1.05, 1.05);
+
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-link:hover {
+    box-shadow: 1px 2px 2px rgba(0.0.0.0.8);
+    transform: scale(1.5 1.5);
+    color: rgb(18, 17, 17)
+}
+
+nav img {
+    border-radius: 30px;
+    margin: 5px;
+    margin-right: 10px;
+    background-color: transparent;
+    transition: 0.3s
+}
+
+nav img:hover {
+    margin: 5px;
+    margin-right: 10px;
+    transform: scale(1.1, 1.1);
+    box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+
+
+/* Formulario LOGIN */
+.form-contentl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container.blog {
+    background-color: #70a8da;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 400px;
+
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #ffd700;
+    color: #333;
+}
+
+.form {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+
+
+.form-contentl input[type="submit"] {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #56738C;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.form-contentl input[type="submit"]:hover {
+    background-color: #91C2ED;
+    transition: 0.3s;
+}
+
+.form-contentl input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.form-contentl input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border: 1px solid #555;
+}
+
+label {
+    font-weight: bold;
+}
+
+.form-group h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+.nav-item.rigth {
+    margin-left: auto;
+}
+
+.r.btn.botoncito {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+/* Formulario login */
+
+/* Formulario registro */
+form-contentr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container.formreg {
+    max-width: 400px;
+    margin: 0 auto;
+    background: whitesmoke;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tituloreg {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group.reg {
+    margin-bottom: 20px;
+}
+
+
+/* Formulario Registro*/
+#carouselExampleCaptions {
+    width: auto;
+    height: 300px;
+}
+
+.carousel-caption {
+    transform: translateY(50px);
+
+}
+
+.titulo-carousel {
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgba(112, 118, 268, 0.2);
+    margin-bottom: 0px;
+    padding: 5px 0px 5px 0px;
+    border-radius: 10px 10px 0px 0px;
+    font-weight: 500;
+}
+
+.texto-carousel {
+    font-size: large;
+    background-color: rgba(112, 118, 268, 0.2);
+    padding: 5px 0px 15px 0px;
+    border-radius: 0px 0px 10px 10px;
+    color: rgb(255, 255, 255);
+    text-shadow: 2px 3px 3px;
+}
+
+.carousel-indicators {
+    background-color: #56738C;
+}
+
+.carousel-control-prev-icon {
+    background-color: #91C2ED;
+}
+
+.carousel-control-next-icon {
+    background-color: #91C2ED;
+}
+
+.noticias {
+    padding: 30px;
+
+}
+
+.noticia {
+    padding: 30px;
+    margin: 10px;
+    border-color: #ffd700;
+
+}
+
+#titular {
+    text-align: center;
+    color: #56738C;
+    font-size: x-large;
+}
+
+#cuerpo {
+    text-align: justify;
+}
+
+#bienvenida {
+    font-family: inconsolata;
+}
+
+.futer {
+    margin: 0px;
+}
+
+
+footer {
+    position: relative;
+    margin-bottom: 0px;
+    margin-top: auto
+}
+
+::placeholder {
+    color: gray;
+    font-size: 0.8em;
+    font-style: italic;
+}

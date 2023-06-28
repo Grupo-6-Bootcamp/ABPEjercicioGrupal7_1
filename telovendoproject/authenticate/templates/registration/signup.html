@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registro{% endblock %}
+{% block body %}
+<div class="form-content">
+    <div class="form-container blog">
+        <div class="form-group">
+            {% if formulario.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ formulario.errors }}
+            </div>
+            {% endif %}
+            <h2>Regístrate aquí</h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ formulario.username }}
+                <br>
+                {{ formulario.email }}
+                <br>
+                {{ formulario.email2 }}
+                <br>
+                <input type="submit" value="Registrarse" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock body %}
