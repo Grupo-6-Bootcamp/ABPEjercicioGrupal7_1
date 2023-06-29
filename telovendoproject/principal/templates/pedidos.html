@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pedidos{% endblock %}
+
+{% block body %}
+
+<div class="card-group noticias">
+    <div class="card noticia">
+        <button class="btn botoncito btn-outline-personal" type="submit">Tomar pedido</button>
+        <div class="card-body">
+            <h1 id="titular" class="card-title">Lista de pedidos</h1>
+            {% for pedido in pedidos %}
+            <div class="card container">
+                <table class="card table">
+                    
+                    <tr>
+                      <th scope="col">#ID pedido</th>
+                      <th scope="col">Nombre cliente</th>
+                      <th scope="col">Detalles</th>
+                    </tr>
+                  
+                    {% for pedido in pedidos %}
+                    <tr>
+                      <th scope="row">{{idpedido}}</th>
+                      <td>{{cliente.nombre}}</td>
+                      <td><button class="btn botoncito btn-outline-personal" type="submit">Detalles</button></td>
+                    </tr>
+                    {%endfor%}
+
+            </table>
+            
+            </div>
+            {% empty %}
+            <p>No existen registros de pedidos realizados</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
