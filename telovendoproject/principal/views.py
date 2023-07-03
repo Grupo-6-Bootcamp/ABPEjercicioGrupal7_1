@@ -1,38 +1,40 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from .models import Producto, Pedido
 from .forms import EstadoPedidoForm, ProductoForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 def index(request):
     return render(request, "index.html")
 
+@method_decorator(staff_member_required, name='dispatch')
 class PedidosView(View):
     template_name='pedidos.html'
 
     def get(self, request, *args, **kwargs):
-       pedidos = Pedido.objects.all()
-       context = {'pedidos': pedidos}
-       return render(request, self.template_name, context=context)
+        pedidos = Pedido.objects.all()
+        context = {'pedidos': pedidos}
+        return render(request, self.template_name, context=context)
 
 class GestionProdView(View):
-   template_name='gestion_prod.html'
+    template_name='gestion_prod.html'
 
-   def get(self, request, *args, **kwargs):
-      productos = Producto.objects.all()
-      context = {'productos': productos}
-      return render(request, self.template_name, context=context)
-   
+    def get(self, request, *args, **kwargs):
+            productos = Producto.objects.all()
+            context = {'productos': productos}
+            return render(request, self.template_name, context=context)
+
 
 class PedidoDetalleView(View):
     template_name: 'detalle_pedido.html'
-    
 
     def get(self, request, pk):
         pedido = get_object_or_404(Pedido, pk=pk)
         form = EstadoPedidoForm(instance = pedido)
         context = {'pedido' : pedido,
-                   "form" : form}
+                    "form" : form}
         return render(request, 'detalle_pedido.html', context)
 
     def post(self, request, pk):

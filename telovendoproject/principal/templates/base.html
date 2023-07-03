@@ -27,17 +27,14 @@
       </button>
       <div class="collapse navbar-collapse ms-auto" id="navbarNavDropdown">
         <ul class="navbar-nav">
-         
-          {% comment %} <li class="nav-item botoncito">
-            <a class="nav-link" href="{% url 'clients' %}">Clientes</a>
-          </li> {% endcomment %}
+          {% if user.is_active and user.is_staff %}
           <li class="nav-item botoncito">
             <a class="nav-link" href="{% url 'pedidos' %}">Pedidos</a>
           </li>
-        
           <li class="nav-item botoncito">
             <a class="nav-link" href="{% url 'gestionprod' %}">Gestión de productos</a>
           </li>
+          {% endif %}
         </ul>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item logclass botoncito">

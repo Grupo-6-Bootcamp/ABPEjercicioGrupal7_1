@@ -7,18 +7,22 @@ class SignUpForm(forms.ModelForm):
     username = forms.CharField(
         max_length=30,
         help_text='Requerido. 30 caracteres o menos. Letras y números solamente.',
-        label='Nombre de usuario'
+        label='Nombre de usuario:',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     email = forms.EmailField(
         max_length=254,
-        help_text='Requerido. Ingrese una dirección de correo válida.'
+        label='Correo electrónico:',
+        help_text='Requerido. Ingrese una dirección de correo válida.',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     email2 = forms.EmailField(
         max_length=254,
         help_text='Requerido. Ingrese una dirección de correo válida.',
-        label='Confirmar correo electrónico'
+        label='Confirmar correo electrónico:',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     def clean(self):

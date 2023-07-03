@@ -3,7 +3,7 @@
 
 {% block title %}Registro{% endblock %}
 {% block body %}
-<div class="form-content">
+<div class="row justify-content-center">
     <div class="form-container blog">
         <div class="form-group">
             {% if formulario.errors %}
@@ -14,14 +14,18 @@
             <h2>Regístrate aquí</h2>
             <form action="" method="post">
                 {% csrf_token %}
+                <div class="m-2">
                 {{ formulario.username.label }}
                 {{ formulario.username }}
-                <br>
+                </div>
+                <div class="m-2">
                 {{ formulario.email.label }}
                 {{ formulario.email }}
-                <br>
+                 </div>
+                <div class="m-2">
                 {{ formulario.email2.label }}
                 {{ formulario.email2 }}
+                </div>
                 <br>
                 <input type="submit" value="Registrarse" class="btn btn-primary">
             </form>
