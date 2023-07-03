@@ -41,9 +41,6 @@ class ProductoWishlist(models.Model):
     idproducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad_deseada = models.PositiveIntegerField(blank=False)
 
-    class Meta:
-        unique_together = ('idwishlist', 'idproducto')
-
     def __str__(self):
         return f"Wishlist: {self.idwishlist} - {self.idwishlist.idcliente.nombre}"
 
@@ -79,9 +76,6 @@ class Detalle(models.Model):
     productos = models.ForeignKey(Producto, on_delete=models.PROTECT)
     cantidad = models.PositiveIntegerField(null=False)
     valor_unit = models.PositiveIntegerField(null=False)
-
-    class Meta:
-        unique_together = ('pedido', 'productos')
-
+    
     def __str__(self):
         return f"Detalle - Pedido: {self.pedido}, Producto: {self.productos}"
