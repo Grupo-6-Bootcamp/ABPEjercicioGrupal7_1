@@ -1,1 +1,2 @@
-telovendovenv/
+/venv/
+.env
