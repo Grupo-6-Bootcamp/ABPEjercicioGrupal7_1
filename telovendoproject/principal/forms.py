@@ -2,7 +2,10 @@ from django import forms
 from .models import Pedido, Producto
 
 class EstadoPedidoForm(forms.ModelForm):
-    
+    def __init__(self, *args, **kwargs):
+        super(EstadoPedidoForm, self).__init__(*args, **kwargs)
+        self.fields['estadopedido'].widget.attrs['class'] = 'form-select'
+
     class Meta():
         model = Pedido
         fields = ('estadopedido',)
@@ -17,13 +20,11 @@ class ProductoForm(forms.ModelForm):
         self.fields['imagen'].label = 'Imagen'
         self.fields['stock'].label = 'Stock'
 
-
         self.fields['nombre'].widget.attrs['class'] = 'form-control'
         self.fields['valor_unit'].widget.attrs['class'] = 'form-control'
         self.fields['descripcion'].widget.attrs['class'] = 'form-control'
         self.fields['imagen'].widget.attrs['class'] = 'form-control'
         self.fields['stock'].widget.attrs['class'] = 'form-control'
-
 
     class Meta():
         model = Producto
