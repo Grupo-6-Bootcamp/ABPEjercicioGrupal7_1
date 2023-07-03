@@ -79,25 +79,25 @@ WSGI_APPLICATION = 'telovendoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     #     'NAME': 'awake2023_grupo5',
-#     #     'USER': 'grupo5',
-#     #     'PASSWORD': 'adalid.2023',
-#     #     'HOST': '45.173.130.120',
-#     #     'PORT': '5432',
-#     # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'awake2023_grupo5',
+        'USER': 'grupo5',
+        'PASSWORD': 'adalid.2023',
+        'HOST': '45.173.130.120',
+        'PORT': '5432',
+    }
 
         
-# }
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db.sqlite3",
-    }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "db.sqlite3",
+#     }
+# }
 
 AUTH_USER_MODEL = 'authenticate.User'
 
