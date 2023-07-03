@@ -28,7 +28,7 @@ class LoginView(View):
             return redirect('index')
         else:
             context = {"error": "Usuario no encontrado",
-                       'formulario_login': FormularioLogin()}
+                        'formulario_login': FormularioLogin()}
             print(context)
             return render(request, 'registration/login.html', context)
 

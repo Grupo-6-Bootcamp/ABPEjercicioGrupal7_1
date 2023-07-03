@@ -4,7 +4,7 @@ from .models import Pedido, Producto
 class EstadoPedidoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EstadoPedidoForm, self).__init__(*args, **kwargs)
-        self.fields['estadopedido'].widget.attrs['class'] = 'select-control'
+        self.fields['estadopedido'].widget.attrs['class'] = 'form-select'
 
     class Meta():
         model = Pedido

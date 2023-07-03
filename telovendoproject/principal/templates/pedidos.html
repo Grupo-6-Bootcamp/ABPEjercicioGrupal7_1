@@ -22,13 +22,13 @@
                 <div class="col-1">
                     Id
                 </div>
-                <div class="col-4">
+                <div class="col-5">
                     Nombre Cliente
                 </div>
                 <div class="col-3">
                   Estado
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                   Ver Detalle
                 </div>
             </div>
@@ -46,13 +46,13 @@
                 <div class="col-1">
                   {{pedido.id}}
                 </div>
-                <div class="col-4">
+                <div class="col-5">
                   {{pedido.wishlist.idcliente.nombre}} {{pedido.wishlist.idcliente.nombre}}
                 </div>
                 <div class="col-3">
                   {{ pedido.estadopedido }}
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                   <a href="{% url 'pedido_detalle' pedido.id %}" class="btn botoncito btn-outline-personal" type="submit">Detalles</a>
                 </div>
             </div>

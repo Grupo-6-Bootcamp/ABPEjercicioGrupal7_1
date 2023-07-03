@@ -1,2 +1,9 @@
+../AE1_ProyectoGrupal.pdf
+../M7_AE1_ABPro_Grupal_1.pdf
+../Modelo_entidad_relacion.mwb
+../Modelo_entidad_relacion.mwb.bak
+../repo abpro1.txt
 /venv/
-.env
+__pycache__
+telovendoproject/principal/__pycache__/forms.cpython-311.pyc
+telovendoproject/authenticate/migrations/__pycache__/0001_initial.cpython-311.pyc
