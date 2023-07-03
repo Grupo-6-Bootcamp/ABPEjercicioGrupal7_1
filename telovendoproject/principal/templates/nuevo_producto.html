@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Agregar Producto{% endblock %}
+
+{% block body %}
+<div class="row d-flex justify-content-center">
+    <form class="card col-lg-5 p-4" method="POST">{% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+{% endblock %}

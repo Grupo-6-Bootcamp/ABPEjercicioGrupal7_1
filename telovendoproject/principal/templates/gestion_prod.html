@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% load static %} {% block title %}Gestión de
+productos{% endblock %} {% block body %}
+
+<div class="card">
+  <div class="card-body">
+    <a href="{% url 'nuevo_producto' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Producto</a>
+    <h1 id="titular" class="card-title">Gestión de productos</h1>
+    <div class="card container">
+      {% if productos %}
+      <table class="card table">
+        <tr>
+          <th scope="col">#ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Valor unitario</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Stock</th>
+        </tr>
+
+        {% for producto in productos %}
+        <tr>
+          <th scope="row">{{producto.id}}</th>
+          <td>{{producto.nombre}}</td>
+          <td>{{producto.valor_unit}}</td>
+          <td>{{producto.descripcion}}</td>
+          <td>{{producto.stock}}</td>
+          <td>
+            <a href="" type="submit" class="btn btn-primary" value="editar">Editar</a
+            >
+          </td>
+        </tr>
+        {%endfor%}
+      </table>
+    </div>
+    {% else %}
+    <p>No existen productos registrados</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

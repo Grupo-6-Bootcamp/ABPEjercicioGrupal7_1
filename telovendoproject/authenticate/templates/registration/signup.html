@@ -1,3 +1,4 @@
+{% comment %} 
 {% extends 'base.html' %}
 {% load static %}
 
@@ -10,7 +11,7 @@
             <div class="alert alert-danger" role="alert">
                 {{ formulario.errors }}
             </div>
-            {% endif %} {% endcomment %}
+            {% endif %} 
             <h2>Regístrate aquí</h2>
             <form action="" method="post">
                 {% csrf_token %}
@@ -29,3 +30,4 @@
     </div>
 </div>
 {% endblock body %}
+{% endcomment %}
