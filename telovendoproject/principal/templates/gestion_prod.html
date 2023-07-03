@@ -1,17 +1,12 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "base.html" %} {% load static %} {% block title %}Gestión de
+productos{% endblock %} {% block body %}
 
-{% block title %}Gestión de productos{% endblock %}
-
-{% block body %} 
-<div class="card-group noticias">
-  <div class="card noticia">
-      <div class="card-body">
-          <h1 id="titular" class="card-title">Gestión de productos</h1>
-
-          {% for pedido in pedidos %}
-          <div class="card container">
-          <table class="card table">
+<div class="card noticia">
+  <div class="card-body">
+    <h1 id="titular" class="card-title">Gestión de productos</h1>
+    <div class="card container">
+      {% if productos %}
+      <table class="card table">
         <tr>
           <th scope="col">#ID</th>
           <th scope="col">Nombre</th>
@@ -19,7 +14,7 @@
           <th scope="col">Descripción</th>
           <th scope="col">Stock</th>
         </tr>
-      
+
         {% for producto in productos %}
         <tr>
           <th scope="row">{{producto.id}}</th>
@@ -27,18 +22,23 @@
           <td>{{producto.valor_unit}}</td>
           <td>{{producto.descripcion}}</td>
           <td>{{producto.stock}}</td>
-          <td><a href="editarProductos/{{producto.id}}" type="submit" class="btn btn-primary" value="editar">Editar</a></td>
+          <td>
+            <a
+              href="editarProductos/{{producto.idproducto}}"
+              type="submit"
+              class="btn btn-primary"
+              value="editar"
+              >Editar</a
+            >
+          </td>
         </tr>
         {%endfor%}
-</table>
-</div>
-{% empty %}
-<p>No existen productos registrados</p>
-{% endfor %}
-</div>
-
-</div>
+      </table>
+    </div>
+    {% else %}
+    <p>No existen productos registrados</p>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}
-

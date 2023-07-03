@@ -6,7 +6,7 @@ User = get_user_model()
 
 # Create your models here.
 class Cliente(models.Model):
-    idusuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    idusuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=50, null=False)
     apellido = models.CharField(max_length=50, null=False)
     rut = models.CharField(max_length=12, null=False)
@@ -63,7 +63,7 @@ class Pedido(models.Model):
 
     wishlist_idwishlist = models.ForeignKey(Wishlist, null=True, on_delete=models.SET_NULL)
     fecha = models.DateField(auto_now_add=True)
-    direccion_despacho = models.CharField(100)
+    direccion_despacho = models.CharField(max_length=100)
     fecha_despacho = models.DateTimeField(null=False)
     subtotal = models.PositiveIntegerField(null=False)
     valordespacho = models.PositiveIntegerField(null=False)

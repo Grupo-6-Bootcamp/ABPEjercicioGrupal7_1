@@ -88,7 +88,16 @@ DATABASES = {
         'HOST': '45.173.130.120',
         'PORT': '5432',
     }
+
+        
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "mydatabase",
+#     }
+# }
 
 AUTH_USER_MODEL = 'authenticate.User'
 
@@ -117,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-cl'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
