@@ -45,7 +45,7 @@ class ProductoWishlist(models.Model):
         unique_together = ('idwishlist', 'idproducto')
 
     def __str__(self):
-        return f"Wishlist: {self.idwishlist} - {self.idwishlist.nombre}"
+        return f"Wishlist: {self.idwishlist} - {self.idwishlist.idcliente.nombre}"
 
 
 class Pedido(models.Model):
@@ -61,7 +61,7 @@ class Pedido(models.Model):
         ('En Despacho','En Despacho'),
     ]
 
-    wishlist_idwishlist = models.ForeignKey(Wishlist, null=True, on_delete=models.SET_NULL)
+    wishlist = models.ForeignKey(Wishlist, null=True, blank=True, on_delete=models.SET_NULL)
     fecha = models.DateField(auto_now_add=True)
     direccion_despacho = models.CharField(max_length=100)
     fecha_despacho = models.DateTimeField(null=False)
@@ -72,17 +72,16 @@ class Pedido(models.Model):
     estadopedido = models.CharField(null=False, max_length=50, choices=ESTADO_CHOICES)
 
     def __str__(self):
-        return self.idcliente
-
+        return str(self.id)
 
 class Detalle(models.Model):
-    pedido_idpedido = models.ForeignKey(Pedido, on_delete=models.PROTECT)
-    productos_idproducto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    pedido = models.ForeignKey(Pedido, on_delete=models.PROTECT)
+    productos = models.ForeignKey(Producto, on_delete=models.PROTECT)
     cantidad = models.PositiveIntegerField(null=False)
     valor_unit = models.PositiveIntegerField(null=False)
 
     class Meta:
-        unique_together = ('pedido_idpedido', 'productos_idproducto')
+        unique_together = ('pedido', 'productos')
 
     def __str__(self):
-        return f"Detalle - Pedido: {self.pedido_idpedido}, Producto: {self.productos_idproducto}"
+        return f"Detalle - Pedido: {self.pedido}, Producto: {self.productos}"
