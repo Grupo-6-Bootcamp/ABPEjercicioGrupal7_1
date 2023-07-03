@@ -22,3 +22,4 @@ telovendoproject/telovendoproject/__pycache__/__init__.cpython-311.pyc
 telovendoproject/telovendoproject/__pycache__/settings.cpython-311.pyc
 telovendoproject/telovendoproject/__pycache__/urls.cpython-311.pyc
 telovendoproject/telovendoproject/__pycache__/wsgi.cpython-311.pyc
+db.sqlite3
