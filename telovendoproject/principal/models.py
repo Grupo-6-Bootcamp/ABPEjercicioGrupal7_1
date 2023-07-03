@@ -80,8 +80,6 @@ class Detalle(models.Model):
     cantidad = models.PositiveIntegerField(null=False)
     valor_unit = models.PositiveIntegerField(null=False)
 
-    class Meta:
-        unique_together = ('pedido', 'productos')
 
     def __str__(self):
         return f"Detalle - Pedido: {self.pedido}, Producto: {self.productos}"
