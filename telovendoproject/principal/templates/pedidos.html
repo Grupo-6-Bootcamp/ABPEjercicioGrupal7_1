@@ -5,39 +5,66 @@
 
 {% block body %}
 
-    <div class="card">
-        <div class="card-body">
-          <a href="#" class="btn botoncito btn-outline-personal" role="button">Tomar pedido</a>
-            <h1 id="titular" class="card-title">Lista de pedidos</h1>
-
-            {% for pedido in pedidos %}
-            <div class="card container">
-                <table class="card table">
-                    
-                    <tr>
-                      <th scope="col">#ID pedido</th>
-                      <th scope="col">Nombre cliente</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">Detalle</th>
-                    </tr>
-                  
-                    {% for pedido in pedidos %}
-                    
-                    <tr>
-                      <th scope="row">{{pedido.id}}</th>
-                      <td>{{pedido.wishlist.idcliente.nombre}}</td>
-                      <td>{{ pedido.estadopedido }}</td>
-                      <td><a href="{% url 'pedido_detalle' pedido.id %}" class="btn botoncito btn-outline-personal" type="submit">Detalles</a></td>
-                    </tr>
-                    {%endfor%}
-
-            </table>
-            
-            </div>
-            {% empty %}
-            <p>No existen registros de pedidos realizados</p>
-            {% endfor %}
-        </div>
+<div class="row align-items-center">
+  <div class="col-10 d-flex justify-content-left py-3">
+      <h3>Pedidos</h3>
+  </div>
+  <div class="col-2">
+    <a href="{% url 'pedidos' %}" class="btn botoncito btn-outline-personal" role="button">Tomar Pedido</a>
+  </div>
 </div>
 
+<div class="row">
+  <div class="d-flex justify-content-left">
+      <div class="card w-100">
+          <div class="card-body">
+              <div class="row fw-bold">
+                <div class="col-1">
+                    Id
+                </div>
+                <div class="col-5">
+                    Nombre Cliente
+                </div>
+                <div class="col-3">
+                  Estado
+                </div>
+                <div class="col-3">
+                  Ver Detalle
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% for pedido in pedidos %}
+<div class="row">
+  <div class="d-flex justify-content-left">
+      <div class="card w-100">
+          <div class="card-body">
+              <div class="row">
+                <div class="col-1">
+                  {{pedido.id}}
+                </div>
+                <div class="col-5">
+                  {{pedido.wishlist.idcliente.nombre}} {{pedido.wishlist.idcliente.nombre}}
+                </div>
+                <div class="col-3">
+                  {{ pedido.estadopedido }}
+                </div>
+                <div class="col-3">
+                  <a href="{% url 'pedido_detalle' pedido.id %}" class="btn botoncito btn-outline-personal" type="submit">Detalles</a>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% empty %}
+<div class="row">
+  <div class="d-flex justify-content-center">
+    <h4 class="pt-3"><span class="badge text-bg-danger">No hay pedidos diponibles para esta vista</span></h4>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

@@ -1,4 +1,3 @@
-{% comment %} 
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,7 +6,7 @@
 <div class="form-content">
     <div class="form-container blog">
         <div class="form-group">
-            {% comment %} {% if formulario.errors %}
+            {% if formulario.errors %}
             <div class="alert alert-danger" role="alert">
                 {{ formulario.errors }}
             </div>
@@ -30,4 +29,3 @@
     </div>
 </div>
 {% endblock body %}
-{% endcomment %}

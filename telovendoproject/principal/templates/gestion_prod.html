@@ -1,40 +1,76 @@
-{% extends "base.html" %} {% load static %} {% block title %}Gestión de
-productos{% endblock %} {% block body %}
+{% extends "base.html" %} 
+{% load static %} 
 
-<div class="card">
-  <div class="card-body">
-    <a href="{% url 'nuevo_producto' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Producto</a>
-    <h1 id="titular" class="card-title">Gestión de productos</h1>
-    <div class="card container">
-      {% if productos %}
-      <table class="card table">
-        <tr>
-          <th scope="col">#ID</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Valor unitario</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Stock</th>
-        </tr>
+{% block title %}Gestión de productos{% endblock %} 
 
-        {% for producto in productos %}
-        <tr>
-          <th scope="row">{{producto.id}}</th>
-          <td>{{producto.nombre}}</td>
-          <td>{{producto.valor_unit}}</td>
-          <td>{{producto.descripcion}}</td>
-          <td>{{producto.stock}}</td>
-          <td>
-            <a href="" type="submit" class="btn btn-primary" value="editar">Editar</a
-            >
-          </td>
-        </tr>
-        {%endfor%}
-      </table>
+{% block body %}
+
+  <div class="row align-items-center">
+    <div class="col-10 d-flex justify-content-left py-3">
+        <h3>Gestión de Productos</h3>
     </div>
-    {% else %}
-    <p>No existen productos registrados</p>
-    {% endif %}
+    <div class="col-2">
+      <a href="{% url 'nuevo_producto' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Producto</a>
+    </div>
   </div>
-</div>
 
+  <div class="row">
+    <div class="d-flex justify-content-left">
+        <div class="card w-100">
+            <div class="card-body">
+                <div class="row fw-bold">
+                  <div class="col-1">
+                      Id
+                  </div>
+                  <div class="col-3">
+                      Nombre
+                  </div>
+                  <div class="col-2">
+                    Valor Unitario
+                  </div>
+                  <div class="col-4">
+                    Descripción
+                  </div>
+                  <div class="col-2">
+                    Stock
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  {% for producto in productos %}
+  <div class="row">
+    <div class="d-flex justify-content-left">
+        <div class="card w-100">
+            <div class="card-body">
+                <div class="row">
+                  <div class="col-1">
+                      {{ producto.id }}
+                  </div>
+                  <div class="col-3">
+                      {{ producto.nombre }}
+                  </div>
+                  <div class="col-2">
+                    {{ producto.valor_unit }}
+                  </div>
+                  <div class="col-4">
+                    {{ producto.descripcion }}
+                  </div>
+                  <div class="col-2">
+                    {{ producto.stock }}
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="row">
+    <div class="d-flex justify-content-center">
+      <h4 class="pt-3"><span class="badge text-bg-danger">No hay productos diponibles para esta vista</span></h4>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}

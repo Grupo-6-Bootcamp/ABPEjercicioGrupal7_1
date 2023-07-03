@@ -12,12 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -79,25 +80,24 @@ WSGI_APPLICATION = 'telovendoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     #     'NAME': 'awake2023_grupo5',
-#     #     'USER': 'grupo5',
-#     #     'PASSWORD': 'adalid.2023',
-#     #     'HOST': '45.173.130.120',
-#     #     'PORT': '5432',
-#     # }
-
-        
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': '5432',
     }
+
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "db.sqlite3",
+#     }
+# }
 
 AUTH_USER_MODEL = 'authenticate.User'
 
