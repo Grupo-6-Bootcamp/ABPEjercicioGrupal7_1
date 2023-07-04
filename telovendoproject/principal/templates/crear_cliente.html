@@ -1,0 +1,21 @@
+
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block title %}Gestión de productos{% endblock %} 
+
+{% block body %}
+
+<form method="POST" action="">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <p>Crear wishlist para el cliente</p>
+    {{ wishlist_form.as_p }}
+
+    <input type="submit" class="btn-personal"value="Guardar">
+    <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+</form>
+
+</div>
+{% endblock %}

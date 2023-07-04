@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pedido, Producto
+from .models import Cliente, Pedido, Producto, Wishlist, ProductoWishlist
 
 class EstadoPedidoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -29,3 +29,25 @@ class ProductoForm(forms.ModelForm):
     class Meta():
         model = Producto
         fields = '__all__'
+
+
+
+
+
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['nombre', 'apellido', 'rut', 'direccion', 'email', 'telefono']
+
+
+
+class WishlistForm(forms.ModelForm):
+    class Meta:
+        model = Wishlist
+        fields = ['nombre']
+
+class ProductoWishlistForm(forms.ModelForm):
+    class Meta:
+        model = ProductoWishlist
+        exclude = ['idwishlist']

@@ -1,0 +1,38 @@
+
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block title %}Gestión de productos{% endblock %} 
+
+{% block body %}
+<h1>Agregar Productos a la Wishlist</h1>
+
+<p>Wishlist: {{ wishlist.nombre }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Agregar Producto</button>
+</form>
+
+<h2>Productos Agregados:</h2>
+<ul>
+  {% for producto_wishlist in productos_wishlist %}
+    <li>
+      {{ producto_wishlist.idproducto.nombre }} - Cantidad Deseada: {{ producto_wishlist.cantidad_deseada }}
+      <form method="post" action="{% url 'agregar_productos_wishlist' wishlist_id=wishlist.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="delete" value="{{ producto_wishlist.id }}">
+        <button type="submit">Eliminar</button>
+      </form>
+    </li>
+  {% empty %}
+    <li>No se han agregado productos aún.</li>
+  {% endfor %}
+</ul>
+
+
+<p>Valor de despacho: {{ valordespacho }}</p>
+
+
+{% endblock %}

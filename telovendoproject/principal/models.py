@@ -41,8 +41,6 @@ class ProductoWishlist(models.Model):
     idproducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad_deseada = models.PositiveIntegerField(blank=False)
 
-    class Meta:
-        unique_together = ('idwishlist', 'idproducto')
 
     def __str__(self):
         return f"Wishlist: {self.idwishlist} - {self.idwishlist.idcliente.nombre}"
