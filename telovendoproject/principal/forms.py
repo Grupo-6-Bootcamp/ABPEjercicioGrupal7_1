@@ -30,16 +30,10 @@ class ProductoForm(forms.ModelForm):
         model = Producto
         fields = '__all__'
 
-
-
-
-
-
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['nombre', 'apellido', 'rut', 'direccion', 'email', 'telefono']
-
 
 
 class WishlistForm(forms.ModelForm):

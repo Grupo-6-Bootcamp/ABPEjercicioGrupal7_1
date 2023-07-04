@@ -14,7 +14,7 @@
     {{ wishlist_form.as_p }}
 
     <input type="submit" class="btn-personal"value="Guardar">
-    <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+    <a href="{% url 'pedidos' %}">Cancelar</a>
 </form>
 
 </div>

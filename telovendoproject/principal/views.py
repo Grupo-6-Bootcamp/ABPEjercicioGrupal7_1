@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
-from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle
+from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle, Cliente
 from .forms import ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
@@ -91,7 +91,6 @@ class CrearClienteView(View):
 
         context = {'form': form, 'wishlist_form': wishlist_form}
         return render(request, self.template_name, context)
-    
 
 
 class AgregarProductosWishlistView(View):
@@ -101,10 +100,9 @@ class AgregarProductosWishlistView(View):
         wishlist = Wishlist.objects.get(id=wishlist_id)
         productos_wishlist = ProductoWishlist.objects.filter(idwishlist=wishlist)
 
-        # Cálculo del valor de despacho
         valordespacho = 0
         for producto_wishlist in productos_wishlist:
-            valordespacho += producto_wishlist.idproducto.valor_unit
+            valordespacho += producto_wishlist.idproducto.valor_unit * producto_wishlist.cantidad_deseada
 
         form = ProductoWishlistForm()
         context = {'form': form, 'wishlist': wishlist, 'productos_wishlist': productos_wishlist, 'valordespacho': valordespacho}
@@ -115,6 +113,14 @@ class AgregarProductosWishlistView(View):
             product_id = request.POST.get('delete')
             ProductoWishlist.objects.filter(id=product_id).delete()
             return redirect('agregar_productos_wishlist', wishlist_id=wishlist_id)
+
+        if 'regresar' in request.POST:
+            # cliente = Cliente.objects.get(cliente_id=wishlist.idcliente)
+            # context = {'cliente': cliente}
+            return redirect('crear_cliente')
+        
+        if 'continuar' in request.POST: 
+            pass
 
         form = ProductoWishlistForm(request.POST)
         if form.is_valid():
@@ -129,4 +135,3 @@ class AgregarProductosWishlistView(View):
 
         context = {'form': form, 'wishlist': wishlist, 'productos_wishlist': productos_wishlist}
         return render(request, self.template_name, context)
-    
