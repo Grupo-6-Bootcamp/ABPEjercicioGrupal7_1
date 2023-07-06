@@ -12,9 +12,11 @@ urlpatterns = [
          PedidoDetalleView.as_view(), name="pedido_detalle"),
     path('nuevo_producto', IngresoProductoView.as_view(), name="nuevo_producto"),
     path('test01/', views.test01, name='test01'),
+    path('wishlist/', WishList.as_view(), name="wishlist"),
     path('crear_cliente/', CrearClienteView.as_view(), name="crear_cliente"),
     path('agregar_productos_wishlist/<int:wishlist_id>/',
          AgregarProductosWishlistView.as_view(), name="agregar_productos_wishlist"),
     path('crear_pedido/', CrearPedidoView.as_view(), name="crear_pedido"),
+    path('panel_usuario/', PanelUsuario.as_view(), name="panel_usuario"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

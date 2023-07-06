@@ -39,8 +39,7 @@ class CerrarSesion(View):
         logout(request)
         return redirect('index')
 
-# REQUISITO EJERCICIO GRUPAL 3
-#
+
 class Registro(View):
    def get(self, request):
        formulario = SignUpForm()
@@ -73,3 +72,4 @@ class Registro(View):
            print(formulario.errors)
            context = {'formulario': formulario}
            return render(request, 'registration/signup.html', context)
+

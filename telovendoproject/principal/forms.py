@@ -1,6 +1,7 @@
 from django import forms
 from .models import Cliente, Pedido, Producto, Wishlist, ProductoWishlist
 
+
 class EstadoPedidoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EstadoPedidoForm, self).__init__(*args, **kwargs)
@@ -30,10 +31,29 @@ class ProductoForm(forms.ModelForm):
         model = Producto
         fields = '__all__'
 
+
 class ClienteForm(forms.ModelForm):
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['email'].widget.attrs['disabled'] = True
+
     class Meta:
         model = Cliente
-        fields = ['nombre', 'apellido', 'rut', 'direccion', 'email', 'telefono']
+        fields = ['nombre', 'apellido', 'rut', 'email',
+                  'direccion', 'telefono']
+        labels = {
+            'direccion': 'Dirección de Facturación',
+            'email': 'Correo electrónico',
+            'telefono': 'Teléfono'
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'rut': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'readonly': True}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 
 class WishlistForm(forms.ModelForm):
@@ -41,10 +61,12 @@ class WishlistForm(forms.ModelForm):
         model = Wishlist
         fields = ['nombre']
 
+
 class ProductoWishlistForm(forms.ModelForm):
     class Meta:
         model = ProductoWishlist
         exclude = ['idwishlist']
+
 
 class PedidoForm(forms.ModelForm):
     class Meta:
