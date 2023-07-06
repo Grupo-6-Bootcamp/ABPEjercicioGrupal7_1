@@ -45,3 +45,18 @@ class ProductoWishlistForm(forms.ModelForm):
     class Meta:
         model = ProductoWishlist
         exclude = ['idwishlist']
+
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = '__all__'
+
+    # wishlist = models.ForeignKey(Wishlist, null=True, blank=True, on_delete=models.SET_NULL)
+    # fecha = models.DateField(auto_now_add=True)
+    # direccion_despacho = models.CharField(max_length=100)
+    # fecha_despacho = models.DateTimeField(null=False)
+    # subtotal = models.PositiveIntegerField(null=False)
+    # valordespacho = models.PositiveIntegerField(null=False)
+    # valortotal = models.PositiveIntegerField(null=False)
+    # metododepago = models.CharField(null=False, max_length=50, choices=METODOPAGO_CHOICES)
+    # estadopedido = models.CharField(null=False, max_length=50, choices=ESTADO_CHOICES)
