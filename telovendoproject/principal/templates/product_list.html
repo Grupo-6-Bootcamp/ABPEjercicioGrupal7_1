@@ -15,13 +15,12 @@
           <div class="card-body card-producto">
             <!-- Imagen del Producto -->
             <a href="{% url 'producto' producto.id %}">
-              <img src="media/images/producto_default.png" alt="{{ producto.nombre }}" width="266
-              " height="auto">
+              <img src="media/images/producto_default.png" alt="{{ producto.nombre }}" width="100%" height="auto">
             </a>
             <h5 class="titulo-producto">{{ producto.nombre }}</h5>
-            <div card>
-            <p class="card-text texto-producto">Precio: ${{ producto.valor_unit }}</p>
-          </div>
+            <div class="card">
+              <p class="card-text texto-producto">Precio: ${{ producto.valor_unit }}</p>
+            </div>
           </div>
         </div>
       </div>

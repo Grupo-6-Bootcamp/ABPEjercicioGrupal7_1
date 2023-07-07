@@ -33,10 +33,6 @@ class ProductoForm(forms.ModelForm):
 
 
 class ClienteForm(forms.ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['email'].widget.attrs['disabled'] = True
-
     class Meta:
         model = Cliente
         fields = ['nombre', 'apellido', 'rut', 'email',
@@ -56,10 +52,6 @@ class ClienteForm(forms.ModelForm):
         }
 
 class ClienteExternoForm(forms.ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['email'].widget.attrs['disabled'] = True
-
     class Meta:
         model = Cliente
         fields = ['nombre', 'apellido', 'rut', 'email',
@@ -81,7 +73,7 @@ class ClienteExternoForm(forms.ModelForm):
 class WishlistForm(forms.ModelForm):
     class Meta:
         model = Wishlist
-        fields = ['nombre']
+        fields = ['nombre_wishlist']
 
 
 class ProductoWishlistForm(forms.ModelForm):

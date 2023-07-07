@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
-from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle, Cliente, User
+from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle, Cliente
 from .forms import ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm, PedidoForm, ClienteExternoForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
@@ -27,6 +27,7 @@ class PedidosView(View):
         pedidos = Pedido.objects.all()
         context = {'pedidos': pedidos}
         return render(request, self.template_name, context=context)
+
 
 
 class GestionProdView(View):
@@ -85,22 +86,27 @@ class CrearClienteView(View):
     def get(self, request):
         form = ClienteExternoForm()
         wishlist_form = WishlistForm()
-        context = {'form': form, 'wishlist_form': wishlist_form}
+        clientes = Cliente.objects.all()
+        context = {'form': form, 
+                    'wishlist_form': wishlist_form, 
+                    'clientes': clientes}
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = ClienteForm(request.POST)
+        form = ClienteExternoForm(request.POST)
         wishlist_form = WishlistForm(request.POST)
 
-        if form.is_valid() and wishlist_form.is_valid():
+        if request.POST.get('cliente_existente'):
+            cliente = Cliente.objects.get(id=request.POST.get('cliente_existente'))
+        elif form.is_valid() and wishlist_form.is_valid():
             cliente = form.save()
-            wishlist = wishlist_form.save(commit=False)
-            wishlist.idcliente = cliente
-            wishlist.save()
-            return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
+        wishlist = wishlist_form.save(commit=False)
+        wishlist.idcliente = cliente
+        wishlist.save()
+        return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
 
-        context = {'form': form, 'wishlist_form': wishlist_form}
-        return render(request, self.template_name, context)
+    
+    
 
     # ORIGINAL
 # class AgregarProductosWishlistView(View):
@@ -170,10 +176,11 @@ class AgregarProductosWishlistView(View):
     template_name = 'agregar_productos_wishlist.html'
 
     def calculate_subtotal(self, productos_wishlist):
-        subtotal = 0
-        for producto_wishlist in productos_wishlist:
-            subtotal += producto_wishlist.idproducto.valor_unit * producto_wishlist.cantidad_deseada
-        return subtotal
+        return sum(
+            producto_wishlist.idproducto.valor_unit
+            * producto_wishlist.cantidad_deseada
+            for producto_wishlist in productos_wishlist
+        )
 
     def get(self, request, wishlist_id):
         wishlist = Wishlist.objects.get(id=wishlist_id)
@@ -189,17 +196,13 @@ class AgregarProductosWishlistView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, wishlist_id):
-        if 'delete' in request.POST:
+        if request.POST.get('delete'):
             product_id = request.POST.get('delete')
             ProductoWishlist.objects.filter(id=product_id).delete()
             return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
-
-        if 'regresar' in request.POST:
+        elif request.POST.get('regresar'):
             return redirect('crear_cliente')
-
-        
-        if 'continuar' in request.POST:
-            
+        elif request.POST.get('continuar'):
             return redirect('crear_pedido', wishlist_id=wishlist_id)
 
         form = ProductoWishlistForm(request.POST)

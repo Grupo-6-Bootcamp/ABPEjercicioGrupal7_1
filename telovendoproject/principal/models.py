@@ -35,7 +35,7 @@ class Producto(models.Model):
 
 class Wishlist(models.Model):
     idcliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=45)
+    nombre_wishlist = models.CharField(max_length=45)
     fecha = models.DateField(auto_now_add=True)
     productos = models.ManyToManyField(Producto, through='ProductoWishlist')
 

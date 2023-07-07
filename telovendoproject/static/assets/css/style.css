@@ -21,11 +21,11 @@ body {
 }
 
 .titulo {
-  padding-top: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    color: rgb(23, 66, 85)!important;
-    text-align: center;
+  padding: 10px 0 10px 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: rgb(23, 66, 85)!important;
+  text-align: center;
 }
 
 .img-titulo {

@@ -2,20 +2,56 @@
 {% extends "base.html" %} 
 {% load static %} 
 
-{% block title %}Gestión de productos{% endblock %} 
+{% block title %}Creación de cliente externo{% endblock %} 
 
 {% block body %}
 
-<form method="POST" action="">
-    {% csrf_token %}
-    {{form.as_p}}
-
-    <p>Crear wishlist para el cliente</p>
-    {{ wishlist_form.as_p }}
-
-    <input type="submit" class="btn-personal"value="Guardar">
-    <a href="{% url 'pedidos' %}">Cancelar</a>
-</form>
-
+<div class="row align-items-center">
+    <div class="col-10 d-flex justify-content-left py-3">
+        <h3>Seleccionar cliente</h3>
+    </div>
+    <div class="col-2">
+        <a href="{% url 'index' %}" class="btn botoncito btn-outline-personal" role="button">Volver</a>
+    </div>
 </div>
+
+<div class="row">
+    <form method="POST">
+        <div class="col d-flex justify-content-left py-3">
+            {% csrf_token %}
+            <select name="cliente_existente" class="form-select" id="cliente_existente">
+                <option selected="selected" disabled>Seleccionar cliente</option>
+                {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.nombre }} {{cliente.apellido}}</option>
+                    
+                    <!--Redirect to 'agregar_producto_whislist with select client'-->
+                {% endfor %}
+            </select>
+            
+                {% comment %} <input type="submit" class="btn btn-primary"> {% endcomment %}
+        </div>
+        <div class="col">
+            <p>Crear wishlist para el cliente</p>
+            {{ wishlist_form.as_p }}
+            <input type="submit" class="btn" value="Seleccionar">
+        </div>
+    </form>
+</div>
+
+<div class="row align-items-center">
+    <div class="col-12 d-flex justify-content-left py-3">
+        <h3>Cliente nuevo</h3>
+    </div>
+</div>
+
+<div class="row d-flex justify-content-center">
+    <form class="card col-lg-5 p-4" method="POST">{% csrf_token %}
+        {{ form.as_p }} 
+        <p>Crear wishlist para el cliente</p>
+        {{ wishlist_form.as_p }}
+        <input type="submit" class="btn botoncito btn-personal"value="Guardar">
+        <a href="{% url 'pedidos' %}" role="button" class="btn botoncito btn-personal">Cancelar</a>
+    </form>
+</div>
+
 {% endblock %}
