@@ -36,9 +36,9 @@
 
 <form method="post">
   {% csrf_token %}
-  <input name="regresar" role="button" class="btn botoncito btn-outline-personal" value="Regresar">
+  <input type="submit" name="regresar" role="button" class="btn botoncito btn-outline-personal" value="Regresar">
   {% comment %} <button name="btn-regresar" type="submit" class="btn botoncito btn-outline-personal">Regresar</button> {% endcomment %}
-  <input name="continuar" role="button" class="btn botoncito btn-outline-personal" value="Continuar">
+  <input type="submit" name="continuar" role="button" class="btn botoncito btn-outline-personal" value="Continuar">
   {% comment %} <button name="btn-continuar" type="submit" class="btn botoncito btn-outline-personal">Continuar</button> {% endcomment %}
 </form>
 

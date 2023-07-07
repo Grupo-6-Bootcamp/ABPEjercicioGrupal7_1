@@ -8,21 +8,21 @@ class SignUpForm(forms.ModelForm):
         max_length=30,
         help_text='Requerido. 30 caracteres o menos. Letras y números solamente.',
         label='Nombre de usuario:',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu nombre de usuario'})
     )
 
     email = forms.EmailField(
         max_length=254,
         label='Correo electrónico:',
         help_text='Requerido. Ingrese una dirección de correo válida.',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu correo electrónico'})
     )
 
     email2 = forms.EmailField(
         max_length=254,
         help_text='Requerido. Ingrese una dirección de correo válida.',
         label='Confirmar correo electrónico:',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Confirma tu correo electrónico'})
     )
 
     def clean(self):
@@ -40,9 +40,22 @@ class SignUpForm(forms.ModelForm):
 
 
 class FormularioLogin(AuthenticationForm):
-    email = forms.CharField(max_length=50, required=True, label='Correo Electrónico', error_messages={
-        'required': 'El correo electrónico es obligatorio'})
-    password = forms.CharField(max_length=16, required=True, label='Contraseña',
-                               widget=forms.PasswordInput, error_messages={'required': 'La contraseña es obligatoria'})
+    email = forms.CharField(
+        max_length=50,
+        required=True,
+        label='Correo Electrónico',
+        error_messages={'required': 'El correo electrónico es obligatorio'},
+        widget=forms.EmailInput(attrs={'placeholder': 'Ingresa tu correo electrónico'})
+    )
+    password = forms.CharField(
+        max_length=16,
+        required=True,
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'placeholder': 'Ingresa tu contraseña'}),
+        error_messages={'required': 'La contraseña es obligatoria'}
+    )
+
     class Meta:
         model = User
+
+

@@ -7,16 +7,24 @@ body {
     font-size: larger;
 }
 
-
+#bienvenida {
+  background-color:rgb(23, 66, 85);
+  color: white;
+  font-weight: bold;
+  font-family: Inconsolata;
+  font-size: larger;
+  text-align: center;
+}
 .contenido {
     height: 100%;
     margin-bottom: auto;
 }
 
 .titulo {
+  padding-top: 20px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: rgb(19, 62, 80);
+    color: rgb(23, 66, 85)!important;
     text-align: center;
 }
 
@@ -78,7 +86,7 @@ a:link, a:visited, a:active {
   }
 
 .navbar {
-    background-color: rgb(86, 216, 255)!important;
+    background-color: #70a8da!important;
     color: white!important;
     font-weight: bold!important;
 }
@@ -88,7 +96,7 @@ a:link, a:visited, a:active {
   }
   .navbar-nav li a:hover, .navbar-nav li.active a {
     color: #000000 !important;
-    background-color:rgb(86, 216, 255)!important;
+    background-color:#70a8da!important;
     font-weight: bold;
   }
   .navbar-default .navbar-toggle {
@@ -156,9 +164,8 @@ a:link, a:visited, a:active {
     background-color:rgb(255, 255, 255);
     border-radius: 5px;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 13px rgba(0, 0, 0, 0.2);
     width: 600px;
-
 }
 
 .form-group h2 {
@@ -323,10 +330,6 @@ form-contentr {
     width: 100%;
   }
 
-.card {
-
-    border-color: #ffd700;
-}
 
 .card-body {
     padding: 15px;
@@ -337,13 +340,6 @@ form-contentr {
     width: 600px;
     height: auto;
     object-fit: cover;
-}
-
-.card-title {
-    padding-top: 20px;
-    text-align: center;
-    color: #56738C;
-    font-size: x-large;
 }
 
 .card-titulofooter {
@@ -396,7 +392,7 @@ footer {
     color: white;
     font-weight: bold;
     list-style: none;
-    background-color: rgb(86, 216, 255);
+    background-color: #70a8da!important;
     border-radius: 8px;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
@@ -407,6 +403,23 @@ footer {
     background-color:rgb(181, 222, 236);
     box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.8);
     transform: scale(1.05, 1.05);
+}
+
+.botoncito-danger {
+  color: white;
+  font-weight: bold;
+  list-style: none;
+  background-color: #da7070!important;
+  border-radius: 8px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+  margin-right: 5px
+}
+
+.botoncito-danger:hover {
+  background-color:rgb(181, 222, 236);
+  box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.8);
+  transform: scale(1.05, 1.05);
 }
 
 .index-title {
@@ -423,8 +436,10 @@ footer {
 
 .table {
     margin: 0 auto;
-    width: 90%;
-    border-color:#56738C;
+    width: 100%;
+    border-color:#d2e2f3;
+    border-spacing: 0 10px;
+
   }
   
 .table th {
@@ -437,3 +452,31 @@ footer {
     padding: 14px;
   }
   
+
+.card-producto {
+  display: block!important;
+  height: 400px;
+
+}
+
+.titulo-producto {
+padding:10px;
+margin:10px;
+text-align: center;
+color: #1a3247;
+font-size: large;
+}
+
+
+.texto-producto {
+  background-color: #dee5e9;
+  text-align: center;
+  color: #1a3247;
+  font-size: medium;
+}
+
+.btn-form {
+  cursor: pointer;
+  margin: 10px;
+
+}

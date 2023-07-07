@@ -11,7 +11,7 @@
                 {{ formulario.errors }}
             </div>
             {% endif %} 
-            <h2>Regístrate aquí</h2>
+            <h2 class="card-title">Regístrate aquí</h2>
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="m-2">
@@ -28,6 +28,9 @@
                 </div>
                 <br>
                 <input type="submit" value="Registrarse" class="btn btn-primary">
+                <div class="text-center mt-2">
+                <a href="{% url 'login' %}">¿Ya tienes cuenta? <b>Inicia sesión</b></a></div>
+
             </form>
         </div>
     </div>

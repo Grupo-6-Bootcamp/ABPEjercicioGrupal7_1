@@ -10,7 +10,7 @@
         <div class="col col-sm-4">
             <div class="card border-0">
                 <div class="card-body m-3 border-0">
-                    <img src="{{producto.img.url}}" class="img_producto" alt="producto"> 
+                    <img src="{% get_media_prefix %}/images/producto_default.png" alt="{{ producto.nombre }}" width="266" height="auto">
                 </div>
             </div>
         </div>

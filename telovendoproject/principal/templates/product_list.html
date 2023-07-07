@@ -5,36 +5,36 @@
 
 {% block body %}
   
-  <div class="card">
-    <div class="card-body">
-      <h3 class="titulo">Conoce los productos disponibles</h3>
-      <div class="table-responsive mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Productos</th>
-              <th>Precio unitario</th>
-              <th></th>
-            </tr>
-            {% for producto in productos %}
-            <tr>
-              <td>{{producto.nombre}}</td>
-              <td>$ {{producto.valor_unit}}</td>
-              <td> <!--<ahref="{% url 'producto' producto.id %}">Ver detalles</a>--></td>
-            </tr>
- 
-            {% empty %}
-            <div class="row">
-              <div class="d-flex justify-content-center">
-                <h4 class="pt-3"><span class="badge text-bg-danger">No hay productos diponibles para esta vista</span>
-                </h4>
-              </div>
-            </div>
-            {% endfor %}
-  
-        </table>
+<div class="card">
+  <div class="card-body">
+    <h3 class="titulo">Conoce los productos que tenemos disponibles para ti</h3>
+    <div class="row">
+      {% for producto in productos %}
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <div class="card-body card-producto">
+            <!-- Imagen del Producto -->
+            <a href="{% url 'producto' producto.id %}">
+              <img src="media/images/producto_default.png" alt="{{ producto.nombre }}" width="266
+              " height="auto">
+            </a>
+            <h5 class="titulo-producto">{{ producto.nombre }}</h5>
+            <div card>
+            <p class="card-text texto-producto">Precio: ${{ producto.valor_unit }}</p>
+          </div>
+          </div>
+        </div>
       </div>
+      {% empty %}
+      <div class="col">
+        <div class="alert alert-danger" role="alert">
+          No hay productos disponibles para esta vista.
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
+</div>
+
 
   {% endblock body %}

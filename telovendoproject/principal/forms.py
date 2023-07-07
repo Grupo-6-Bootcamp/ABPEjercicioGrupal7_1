@@ -40,7 +40,7 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['nombre', 'apellido', 'rut', 'email',
-                  'direccion', 'telefono']
+                    'direccion', 'telefono']
         labels = {
             'direccion': 'Dirección de Facturación',
             'email': 'Correo electrónico',
@@ -55,6 +55,28 @@ class ClienteForm(forms.ModelForm):
             'telefono': forms.TextInput(attrs={'class': 'form-control'})
         }
 
+class ClienteExternoForm(forms.ModelForm):
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['email'].widget.attrs['disabled'] = True
+
+    class Meta:
+        model = Cliente
+        fields = ['nombre', 'apellido', 'rut', 'email',
+                    'direccion', 'telefono']
+        labels = {
+            'direccion': 'Dirección de Facturación',
+            'email': 'Correo electrónico',
+            'telefono': 'Teléfono'
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'rut': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control',}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 class WishlistForm(forms.ModelForm):
     class Meta:

@@ -6,71 +6,46 @@
 {% block body %}
 
   <div class="row align-items-center">
-    <div class="col-10 d-flex justify-content-left py-3">
-        <h3>Productos</h3>
-    </div>
-    <div class="col-2">
+    <div class="col-12 d-flex justify-content-end py-4">
       <a href="{% url 'nuevo_producto' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Producto</a>
-    </div>
+    </div>    
   </div>
 
-  <div class="row">
-    <div class="d-flex justify-content-left">
-        <div class="card w-100">
-            <div class="card-body">
-                <div class="row fw-bold">
-                  <div class="col-1">
-                      Id
-                  </div>
-                  <div class="col-3">
-                      Nombre
-                  </div>
-                  <div class="col-2">
-                    Valor Unitario
-                  </div>
-                  <div class="col-4">
-                    Descripción
-                  </div>
-                  <div class="col-2">
-                    Stock
-                </div>
-              </div>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Valor Unitario</th>
+          <th>Descripción</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for producto in productos %}
+        <tr>
+          <td>{{ producto.id }}</td>
+          <td>
+            <img src="media/images/producto_default.png" width="100" height="auto">
+          </td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.valor_unit }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.stock }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">
+            <div class="alert alert-danger" role="alert">
+              No hay productos disponibles para esta vista.
             </div>
-        </div>
-    </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 
-  {% for producto in productos %}
-  <div class="row">
-    <div class="d-flex justify-content-left">
-        <div class="card w-100">
-            <div class="card-body">
-                <div class="row">
-                  <div class="col-1">
-                      {{ producto.id }}
-                  </div>
-                  <div class="col-3">
-                      {{ producto.nombre }}
-                  </div>
-                  <div class="col-2">
-                    {{ producto.valor_unit }}
-                  </div>
-                  <div class="col-4">
-                    {{ producto.descripcion }}
-                  </div>
-                  <div class="col-2">
-                    {{ producto.stock }}
-                </div>
-              </div>
-            </div>
-        </div>
-    </div>
-  </div>
-  {% empty %}
-  <div class="row">
-    <div class="d-flex justify-content-center">
-      <h4 class="pt-3"><span class="badge text-bg-danger">No hay productos diponibles para esta vista</span></h4>
-    </div>
-  </div>
-  {% endfor %}
 {% endblock %}
