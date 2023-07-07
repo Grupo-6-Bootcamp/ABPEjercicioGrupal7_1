@@ -2,75 +2,138 @@
 {% load static %}
 
 {% block title %}TeLoVendo - Inicio{% endblock %}
-{% block body %} 
+
+{% block body %}
+
 {% if user.is_authenticated %}
-<img class = "img-titulo" src="{% static 'assets/imagenes/tlv.png' %}" alt="telovendoasdasa">
+
+<!-- Todos los usuarios logeados-->
+
+<img class="img-titulo" src="{% static 'assets/imagenes/tlv.png' %}" alt="telovendoasdasa">
 <h1 id="bienvenida" class="title titulo">¡Que gusto verte! {{ user }} </h1>
 
-<h2>Conoce las novedades que tenemos para ti</h2>
-<h3>Ofertas de la semana</h3>
-<div class="card-group noticias">
-    <div class="card noticia">
-      <img src="https://placedog.net/640/480?r" class="card-img-top" alt="noticia 1">
-        <div class="card-body">
-            <h5 id="titular" class="card-title">Oferta</h5>
-            <p id="cuerpo" class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui eveniet dignissimos, numquam amet vitae neque rerum necessitatibus quis itaque optio excepturi placeat velit expedita hic error alias repellat saepe eaque voluptates officiis adipisci accusantium doloremque! Explicabo laboriosam illo porro quaerat!</p>
-            
-        </div>
+
+{% if user.is_active and user.is_staff %}
+
+<!--Usuarios logeados (staff)-->
+
+<div class="card-group-container">
+  <div class="card-group d-flex gap-4">
+    <div class="card card-custom">
+      <a class="dropdown-item" href="{% url 'pedidos' %}">
+        <img src="{% static 'assets/imagenes/staff/digital-marketing.jpg' %}" class="card-img-top img-fluid" alt="Pedidos">
+      </a>
     </div>
-    <div class="card noticia">
-      <img src="https://placedog.net/640/480?r" class="card-img-top" alt="noticia 2">
-        <div class="card-body">
-            <h5 id="titular" class="card-title">Oferta</h5>
-            <p id="cuerpo" class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi eius quam tempora perferendis dicta ex!</p>
-            
-        </div>
+      <div class="card card-custom">
+        <a class="dropdown-item" href="{% url 'gestionprod' %}">
+          <img src="{% static 'assets/imagenes/staff/desk.jpg' %}" class="card-img-top img-fluid" alt="Productos">
+        </a>
+      </div>
+    
+    <div class="card card-custom">
+      <a class="dropdown-item" href="{% url 'panel_usuario' %}"><img
+          src="{% static 'assets/imagenes/staff/crowd.jpg' %}" class="card-img-top img-fluid" alt="user">
+      </a>
+
     </div>
-    <div class="card noticia">
-      <img src="https://placedog.net/640/480?r" class="card-img-top" alt="noticia 3">
-        <div class="card-body">
-            <h5 id="titular" class="card-title">Liquidación</h5>
-            <p id="cuerpo" class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem minima repellendus animi distinctio iusto beatae? Deserunt voluptates aliquam quas ipsam laudantium nemo libero similique sit quo pariatur, quasi totam commodi?</p>
-            
-        </div>
-    </div>
+  </div>
 </div>
 
 
+  {% else %}
 
-{% else %}
-<img class = "img-titulo" src="{% static 'assets/imagenes/tlv.png' %}" alt="telovendoasdasa">
+  <!--Usuarios logeados (usuario comun)-->
 
+  <div>
+    <h3 class="index-title">Últimos productos agregados</h3>
+  </div>
 
-<div id="carouselExampleCaptions" class="carousel slide">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
+  <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-inner">
       <div class="carousel-item active my-auto">
-        <img src="http://placekitten.com/200/200?r" class="d-block w-auto mx-auto my-auto" alt="...">
+        <img src="{% static 'assets/imagenes/user_img/apple.jpg' %}" class="carousel-img" alt="...">
         <div class="carousel-caption d-none d-md-block">
-          <h5 class="titulo-carousel" >Gatito 1</h5>
           <p class="texto-carousel">Some representative placeholder content for the first slide.</p>
         </div>
       </div>
       <div class="carousel-item my-auto">
-        <img src="http://placekitten.com/200/300?r" class="d-block w-auto mx-auto my-auto" alt="...">
+        <img src="{% static 'assets/imagenes/user_img/game-console.jpg' %}" class="carousel-img" alt="...">
         <div class="carousel-caption d-none d-md-block">
-          <h5 class="titulo-carousel">Gatito 2</h5>
           <p class="texto-carousel">Some representative placeholder content for the second slide.</p>
         </div>
       </div>
       <div class="carousel-item my-auto">
-        <img src="http://placekitten.com/300/200?r" class="d-block w-auto mx-auto my-auto" alt="...">
+        <img src="{% static 'assets/imagenes/user_img/playstation.jpg' %}" class="carousel-img" alt="...">
         <div class="carousel-caption d-none d-md-block">
-          <h5 class="titulo-carousel">Gatito 3</h5>
           <p class="texto-carousel">Some representative placeholder content for the third slide.</p>
         </div>
       </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/user_img/mobile-phone.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the fourth slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/user_img/laptop.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the fifth slide.</p>
+        </div>
+      </div>
     </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  {% endif %}
+
+  {% else %}
+
+  <!--Sin conexión-->
+
+  <img class="img-titulo" src="{% static 'assets/imagenes/tlv.png' %}" alt="telovendo">
+
+  <div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active my-auto">
+        <img src="{% static 'assets/imagenes/home/homeoffice.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the first slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/home/cellular.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the second slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/home/workplace.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the third slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/home/smartwatch.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the fourth slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item my-auto">
+        <img src="{% static 'assets/imagenes/home/laptop.jpg' %}" class="carousel-img" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <p class="texto-carousel">Some representative placeholder content for the fifth slide.</p>
+        </div>
+      </div>
+    </div>
+
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
@@ -83,5 +146,5 @@
 
 
 
-{% endif %}
-{% endblock %}
+  {% endif %}
+  {% endblock %}

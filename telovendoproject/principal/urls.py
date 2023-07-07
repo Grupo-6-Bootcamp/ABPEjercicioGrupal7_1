@@ -18,5 +18,7 @@ urlpatterns = [
          AgregarProductosWishlistView.as_view(), name="agregar_productos_wishlist"),
     path('crear_pedido/', CrearPedidoView.as_view(), name="crear_pedido"),
     path('panel_usuario/', PanelUsuario.as_view(), name="panel_usuario"),
+    path('productos', ProductList.as_view(), name='productos'),
+    path('producto/<int:id>/', ProductDetail.as_view(), name='producto'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,109 +1,181 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Bootstrap 5-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-    rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <!--Font Awesome-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!--Hoja de estilo personalizada-->
-    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" type="text/css" >
-    <title>{% block title %} {% endblock %}</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Bootstrap 5-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <!--Font Awesome-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!--Hoja de estilo personalizada-->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" type="text/css">
+  <title>{% block title %} {% endblock %}</title>
 </head>
 
 <body>
   {% block navegacion %}
+
   {% if user.is_authenticated %}
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'assets/imagenes/logotlv.png' %}"
-        alt="logo" width="60px" height="auto"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'assets/imagenes/logotlv.png' %}" alt="logo" width="60px" height="auto">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse ms-auto" id="navbarNavDropdown">
-        {% if user.is_active and user.is_staff %}
-        <ul class="navbar-nav">
-          <li class="nav-item botoncito">
-            <a class="nav-link" href="{% url 'pedidos' %}">Pedidos</a>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ">
+          {% if user.is_active and user.is_staff %}
+          <div class="navbar-user">
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Gestión
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'pedidos' %}">Pedidos</a></li>
+                <li><a class="dropdown-item" href="{% url 'gestionprod' %}">Productos</a></li>
+                <li><a class="dropdown-item" href="{% url 'panel_usuario' %}">Panel de usuario</a></li>
+                <li><a class="dropdown-item" href="#">¿Necesitas ayuda?</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="nav-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
+              </ul>
+
+          </div>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Productos
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'productos' %}">Todos</a></li>
+              <li><a class="dropdown-item" href="#">Tecnología</a></li>
+              <li><a class="dropdown-item" href="#">Hardware</a></li>
+              <li><a class="dropdown-item" href="#">Periféricos</a></li>
+              <li><a class="dropdown-item" href="#">Electro</a></li>
+              <li><a class="dropdown-item" href="#">Accesorios</a></li>
+            </ul>
           </li>
-          <li class="nav-item botoncito">
-            <a class="nav-link" href="{% url 'gestionprod' %}">Gestión de productos</a>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Nosotros</a>
           </li>
-          <li class="nav-item logclass botoncito">
-            <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
           </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              {{ user }}
+            </a>
+
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Mis compras</a></li>
+            <li><a class="dropdown-item" href="#">Pedidos</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">¿Necesitas ayuda?</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="nav-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
+          </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#">
+              <img style="width:35px; " id="cart-icon" src="{% static 'assets/imagenes/cart.png' %}">
+              <!--<p id="cart-total">{{cartItems}}</p>-->
+            </a>
+          </li>
+
+          {% endif %}
         </ul>
-        {% else %}
-        <ul class="navbar-nav">
-            <li class="nav-item botoncito">
-              <a class="nav-link" href="{% url 'pedidos' %}">Pedidos</a>
-            </li>
-            <li class="nav-item botoncito">
-              <a class="nav-link" href="{% url 'panel_usuario' %}">Panel de usuario</a>
-            </li>
-            <li class="nav-item logclass botoncito">
-              <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
-            </li>
-        </ul>
-        {% endif %}
       </div>
     </div>
   </nav>
+
+
   {% else %}
 
   <!--Navbar publico-->
 
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'assets/imagenes/logotlv.png' %}" alt="logo" width="60px" height="auto">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item botoncito">
-                    <a class="nav-link disabled">En construccion</a>
-                </li>
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'assets/imagenes/logotlv.png' %}" alt="logo" width="60px" height="auto">
+      </a>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Productos
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'productos' %}">Todos</a></li>
+              <li><a class="dropdown-item" href="#">Tecnología</a></li>
+              <li><a class="dropdown-item" href="#">Hardware</a></li>
+              <li><a class="dropdown-item" href="#">Periféricos</a></li>
+              <li><a class="dropdown-item" href="#">Electro</a></li>
+              <li><a class="dropdown-item" href="#">Accesorios</a></li>
             </ul>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item loginbutton {% if request.path == '/login/' %}d-none{% endif %} botoncito">
-                    <a class="nav-link" href="{% url 'login' %}"><i class="fa-regular fa-user m-2"></i>Iniciar Sesión</a>
-                </li>
-            </ul>
-        </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
+        </ul>
+      </div>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item loginbutton {% if request.path == '/login/' %}d-none{% endif %}">
+          <a class="nav-link" href="{% url 'login' %}"><i class="fa-regular fa-user m-2"></i>Iniciar Sesión</a>
+        </li>
+      </ul>
     </div>
-</nav>
+  </nav>
+
+
   {% endif %}
   {% endblock navegacion %}
+
+
   <div class="container my-3 contenido">
     {% block body %} {% endblock body %}
   </div>
 
-{% block footer %}
+  {% block footer %}
 
   <footer id="sticky-footer" class="flex-shrink-0 py-4 text-white-50 footerbase">
-    
+
     <div class="row row-cols-1 row-cols-md-3 g-4 futer">
       <div class="col futer">
         <div id="card-footer" class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Te lo vendo</h5>
-            <p class="card-text">En Te Lo Vendo, ofrecemos soluciones innovadoras y calidad excepcional. Nuestro enfoque centrado en el cliente nos impulsa a superar expectativas y establecer relaciones de confianza duraderas.</p>
+            <h5 class="card-titulofooter">Te lo vendo</h5>
+            <p class="card-text">En Te Lo Vendo, ofrecemos soluciones innovadoras y calidad excepcional. Nuestro enfoque
+              centrado en el cliente nos impulsa a superar expectativas y establecer relaciones de confianza duraderas.
+            </p>
           </div>
         </div>
       </div>
       <div class="col futer">
         <div id="card-footer" class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Contacto</h5>
+            <h5 class="card-titulofooter">Contacto</h5>
             <ul>
               <li>
                 123 Fake Street, Santiago, Chile
@@ -122,29 +194,30 @@
       <div class="col futer">
         <div id="card-footer" class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Nuestras redes sociales</h5>
+            <h5 class="card-titulofooter">Nuestras redes sociales</h5>
             <div>
               <div class="redes">
-                <a class="d-inline-flex r mb-2"
-                  href="https://www.instagram.com/"> <img class="redesimg mb-4" src="{% static 'assets/imagenes/instagram.png'%}" alt=" instagram"
-                  width="50px" height="auto">
+                <a class="d-inline-flex r mb-2" href="https://www.instagram.com/"> <img id="redesimg" class="mb-4"
+                    src="{% static 'assets/imagenes/instagram.png'%}" alt=" instagram" width="50px" height="auto">
                 </a>
-                
-                <a class="d-inline-flex  mb-2"
-                    href="https://www.twitter.com/">
-                  <img class="redesimg mb-4" src="{% static 'assets/imagenes/twitter.png'%}" alt="twitter" width="50px" height="auto">
+
+                <a class="d-inline-flex  mb-2" href="https://www.twitter.com/">
+                  <img id="redesimg" class="mb-4" src="{% static 'assets/imagenes/twitter.png'%}" alt="twitter"
+                    width="50px" height="auto">
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-    </div>
-    <div id="brand" class="container text-center">
+      </div>
+      <div id="brand" class="container text-center">
         <small>Grupo 5 - Desarrolo de Aplicaciones Full Stack Python &copy; TeLoVendo</small>
-    </div>
-</footer>
-{% endblock footer %}
+      </div>
+  </footer>
+  {% endblock footer %}
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
 </html>

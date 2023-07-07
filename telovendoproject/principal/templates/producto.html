@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}TeLoVendo - Inicio{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col col-sm-4">
+            <div class="card border-0">
+                <div class="card-body m-3 border-0">
+                    <img src="{{producto.img.url}}" class="img_producto" alt="producto"> 
+                </div>
+            </div>
+        </div>
+        <div class="col col-sm-8">
+            <div class="card border-0">
+                <div class="card-body m-3 bg-secondary-subtle">
+                    <ul class="list-group m-3 ">
+                        <li class="list-group-item m-1 rounded-2 border-0 bg-primary-subtle">{{ producto.nombre|title }}</li>
+                        <li class="list-group-item m-1 rounded-2 border-0 bg-primary-subtle">$ {{ producto.valor_unit }}</li>
+                    </ul>
+                    
+                    <ul class="list-group m-3 bg-secondary">
+                        <li class="list-group-item m-3 bg-secondary text-light">Descripción: </li>
+                        <li class="list-group-item m-1 bg-secondary text-light border-0">
+                            {{ producto.descripcion }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+  </div>
+
+  {% endblock  %}

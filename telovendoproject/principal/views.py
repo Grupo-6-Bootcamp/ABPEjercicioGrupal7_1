@@ -9,6 +9,9 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.urls import reverse_lazy
 
 User = get_user_model()
 
@@ -229,3 +232,36 @@ class PanelUsuario(View, LoginRequiredMixin):
 
         context = {"form": form}
         return render(request, "panel_usuario.html", context)
+
+class ProductList(ListView):
+    model = Producto
+    context_object_name = 'productos'
+    ordering = ['nombre']
+    template_name = 'product_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        #nombre = self.request.GET.get('nombre')
+        #precio = self.request.GET.get('valor_unit')
+        #descripcion = self.request.GET.get('descripcion')
+        #imagen = self.request.GET.get('imagen')
+
+        #if nombre:
+        #    queryset = queryset.filter(nombre=nombre)
+        #if precio:
+        #    queryset = queryset.filter(titulo__icontains=precio)
+        return queryset
+
+class ProductDetail(LoginRequiredMixin, DetailView):
+    model = Producto
+    context_object_name = 'producto'
+    template_name = 'producto.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        producto = self.object
+        nombre = producto.nombre
+        valor_unit = producto.valor_unit
+
+        context['valor_unit'] = valor_unit
+        return context

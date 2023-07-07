@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}TeLoVendo - Inicio{% endblock %}
+
+{% block body %}
+  
+  <div class="card">
+    <div class="card-body">
+      <h3 class="titulo">Conoce los productos disponibles</h3>
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Productos</th>
+              <th>Precio unitario</th>
+              <th></th>
+            </tr>
+            {% for producto in productos %}
+            <tr>
+              <td>{{producto.nombre}}</td>
+              <td>$ {{producto.valor_unit}}</td>
+              <td> <!--<ahref="{% url 'producto' producto.id %}">Ver detalles</a>--></td>
+            </tr>
+ 
+            {% empty %}
+            <div class="row">
+              <div class="d-flex justify-content-center">
+                <h4 class="pt-3"><span class="badge text-bg-danger">No hay productos diponibles para esta vista</span>
+                </h4>
+              </div>
+            </div>
+            {% endfor %}
+  
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% endblock body %}
