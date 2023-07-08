@@ -6,45 +6,44 @@
 {% block body %}
 <div class="card">
     <div class="card-body">
-        <h2>Pedido #{{pedido.id}}</h2>
-        <form class="row g-3" method="POST">{% csrf_token %}
+        <h2>Pedido #{{ pedido.id }}</h2>
+        <form class="row g-3" method="POST">
+            {% csrf_token %}
             <div class="col-md-6">
                 <label>Nombre Cliente</label>
-                <p>{{pedido.wishlist.idcliente.nombre}} {{pedido.wishlist.idcliente.apellido}}</p>
+                <p>{{ wishlist.idcliente.nombre }} {{ wishlist.idcliente.apellido }}</p>
             </div>
             <div class="col-md-6">
                 <label>Rut Cliente</label>
-                <p>{{pedido.wishlist.idcliente.rut}}</p>
+                <p>{{ wishlist.idcliente.rut }}</p>
             </div>
             <div class="col-md-6">
                 <label>Email Cliente</label>
-                <p>{{pedido.wishlist.idcliente.email}}</p>
+                <p>{{ wishlist.idcliente.email }}</p>
             </div>
             <div class="col-md-6">
                 <label>Dirección de facturación</label>
-                <p>{{pedido.wishlist.idcliente.direccion}}</p>
+                <p>{{ wishlist.idcliente.direccion }}</p>
             </div>
             <div class="col-md-6">
                 <label>Dirección de despacho</label>
-                <p>{{pedido.direccion_despacho}}</p>
+                <p>{{ form.direccion_despacho }}</p>
             </div>
             <div class="col-md-6">
-                <label>Fecha de compra</label>
-                <p>{{pedido.fecha}}</p>
+                <label>Medio de pago</label>
+                {{ form.metododepago }}
             </div>
             <div class="col-md-6">
-                <label>Fecha de despacho</label>
-                <p>{{pedido.fecha_despacho}}</p>
-            </div>
-            <div class="col-md-6">
-            <label>Estado del despacho</label>
-                {{ form.estadopedido }}
-            </div>
+                <label>Subtotal</label>
+                <p>{{ subtotal }}</p>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                {% comment %} <button href="{% url 'pedidos' %}" class="btn btn-danger">Cancelar</button> {% endcomment %}
+                <a href="{% url 'pedidos' %}" class="btn btn-danger">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
+
+
+
 {% endblock %}
