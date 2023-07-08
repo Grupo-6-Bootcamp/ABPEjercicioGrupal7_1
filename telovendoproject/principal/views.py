@@ -297,9 +297,8 @@ class WishList(TemplateView, LoginRequiredMixin):
         }
         return render(request, self.template_name, context)
 
-    def post(self, request):
+    def post(self, request, wishlist_id):
         wishlist = Wishlist.objects.get(id=wishlist_id)
-
         if request.POST.get('delete'):
             product_id = request.POST.get('delete')
             ProductoWishlist.objects.filter(id=product_id).delete()
@@ -317,7 +316,9 @@ class WishList(TemplateView, LoginRequiredMixin):
             producto_wishlist.save()
             return redirect('agregar_productos_wishlist', wishlist_id=wishlist_id)
 
-        productos_wishlist = ProductoWishlist.objects.filter(idwishlist=wishlist)
+        wishlist = Wishlist.objects.get(id=wishlist_id)
+        productos_wishlist = ProductoWishlist.objects.filter(
+            idwishlist=wishlist)
         subtotal = self.calculate_subtotal(productos_wishlist)
         context = {
             'form': form,
