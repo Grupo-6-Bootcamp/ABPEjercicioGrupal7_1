@@ -283,8 +283,7 @@ class WishList(TemplateView, LoginRequiredMixin):
             wishlist = Wishlist.objects.get(id=wishlist_id)
         except Wishlist.DoesNotExist:
             usuario = User.objects.get(id=request.user.id, nombre=request.user.nombre, apellido=request.user.apellido)
-            wishlist = Wishlist.objects.create(idcliente=self.request.userid, nombre_wishlist="Wishlist de " + self.request.user.nombre + " " + usuario.apellido)
-            wishlist.save()
+            wishlist = Wishlist.objects.create(idcliente=usuario.id, nombre_wishlist="Wishlist de " + usuario.nombre
         
         productos_wishlist = ProductoWishlist.objects.filter(idwishlist=wishlist)
         subtotal = self.calculate_subtotal(productos_wishlist)
