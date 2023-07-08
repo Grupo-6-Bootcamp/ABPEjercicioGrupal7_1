@@ -9,8 +9,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('pedidos', PedidosView.as_view(), name='pedidos'),
     path('gestion', GestionProdView.as_view(), name="gestionprod"),
-    path('pedido_detalle/<int:pk>/',
-         PedidoDetalleView.as_view(), name="pedido_detalle"),
     path('nuevo_producto', IngresoProductoView.as_view(), name="nuevo_producto"),
     path('test01/', views.test01, name='test01'),
     path('wishlist/', WishList.as_view(), name="wishlist"),
@@ -23,8 +21,8 @@ urlpatterns = [
     path('productos', ProductList.as_view(), name='productos'),
     path('producto/<int:pk>/', ProductDetail.as_view(), name='producto'),
     path('contacto/', ContactView.as_view(), name="contacto")
-
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

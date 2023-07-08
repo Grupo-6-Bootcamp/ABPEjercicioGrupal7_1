@@ -44,32 +44,6 @@ class GestionProdView(View):
         return render(request, self.template_name, context=context)
 
 
-class PedidoDetalleView(View):
-    template_name: 'detalle_pedido.html'
-
-    def get(self, request, pk):
-        pedido = get_object_or_404(Pedido, pk=pk)
-        form = EstadoPedidoForm(instance=pedido)
-        context = {'pedido': pedido,
-                   "form": form}
-        try:
-            detalle = Detalle.objects.filter(pedido=pedido)
-            print("detalles  ", detalle)
-            context["detalle"] = detalle 
-        except Detalle.DoesNotExist:
-            pass
-        return render(request, 'detalle_pedido.html', context)
-
-    def post(self, request, pk):
-        pedido = get_object_or_404(Pedido, pk=pk)
-        form = EstadoPedidoForm(request.POST, instance=pedido)
-        if form.is_valid():
-            pedido = form.save(commit=False)
-            pedido.estadopedido = form.cleaned_data['estadopedido']
-            pedido.save()
-            return redirect('pedidos')
-
-
 class IngresoProductoView(View):
     template_name = 'nuevo_producto.html'
 
