@@ -5,56 +5,76 @@
 
 {% block body %}
 
-<div class="row align-items-center">
-  <div class="col-10 d-flex justify-content-left py-3">
-      <h3>Pedido #{{pedido.id}}</h3>
-  </div>
-  <div class="col-2">
-    <a href="{% url 'index' %}" class="btn botoncito btn-outline-personal" role="button">Volver</a>
-  </div>
-</div>
-
 <div class="row d-flex justify-content-center">
-  <div class="card">
-    <form class="card-body row g-3" method="POST">{% csrf_token %}
-      <div class="col-md-6">
-        <label>Nombre cliente:</label>
-        <p>{{pedido.wishlist.idcliente.nombre}} {{pedido.wishlist.idcliente.apellido}}</p>
-      </div>
-      <div class="col-md-6">
-          <label>Rut cliente:</label>
-          <p>{{pedido.wishlist.idcliente.rut}}</p>
+  <div class="col-lg-6">
+      <form method="POST" class="form-container blog">
+        {% csrf_token %}
+        <div class="row align-items-center">
+          <div class="d-flex justify-content-center py-3">
+            <h3 class="titulo">Detalle del pedido # {{pedido.id}}</h3>
         </div>
-      <div class="col-md-6">
-        <label>Correo electrónico:</label>
-        <p>{{pedido.wishlist.idcliente.email}}</p>
-      </div>
-      <div class="col-md-6">
-          <label>Dirección de facturación:</label>
-          <p>{{pedido.wishlist.idcliente.direccion}}</p>
+        <div class="col-md-6">
+          <label class="form-label">Nombre cliente:</label>
+          <p>{{ pedido.wishlist.idcliente.nombre }} {{ pedido.wishlist.idcliente.apellido }}</p>
         </div>
-      <div class="col-md-6">
-        <label>Dirección de despacho:</label>
-        <p>{{pedido.direccion_despacho}}</p>
-      </div>
-      <div class="col-md-6">
-        <label>Fecha de compra:</label>
-        <p>{{pedido.fecha}}</p>
-      </div>
-      <div class="col-md-6">
-          <label>Fecha de despacho:</label>
-          <p>{{pedido.fecha_despacho}}</p>
+        <div class="col-md-6">
+          <label class="form-label">Rut cliente:</label>
+          <p>{{ pedido.wishlist.idcliente.rut }}</p>
         </div>
-      <div class="col-md-6">
-        <label>Estado del despacho:</label>
-            {{ form.estadopedido }}
+        <div class="col-md-6">
+          <label class="form-label">Correo electrónico:</label>
+          <p>{{ pedido.wishlist.idcliente.email }}</p>
         </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <button href="{url 'pedidos'}" class="btn btn-danger">Cancelar</button>
-      </div>
-    </form>
+        <div class="col-md-6">
+          <label class="form-label">Dirección de facturación:</label>
+          <p>{{ pedido.wishlist.idcliente.direccion }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Dirección de despacho:</label>
+          <p>{{ pedido.direccion_despacho }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fecha de compra:</label>
+          <p>{{ pedido.fecha }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fecha de despacho:</label>
+          <p>{{ pedido.fecha_despacho }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label destacado">Estado del despacho:</label>
+          {{ form.estadopedido }}
+        </div>
+        {% if detalle %}
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Valor unitario</th>
+                <th>Valor total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in detalle %}
+              <tr>
+                <td>{{ item.productos }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.valor_unit }}</td>
+                <td>{{ item.cantidad_valor }}</td>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <a href="{% url 'pedidos' %}" class="btn btn-danger">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-</div>
-
 {% endblock %}

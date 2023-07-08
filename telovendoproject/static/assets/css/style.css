@@ -439,6 +439,7 @@ footer {
     width: 100%;
     border-color:#d2e2f3;
     border-spacing: 0 10px;
+    margin-bottom: 10px;
 
   }
   
@@ -478,5 +479,47 @@ font-size: large;
 .btn-form {
   cursor: pointer;
   margin: 10px;
+}
 
+.valor-unitario {
+  width: 150px;
+}
+
+.destacado {
+  color: blue;
+}
+
+/* Resaltar la opción "Pendiente" */
+#id_estadopedido option[value="Pendiente"] {
+  background-color: rgb(255, 255, 198);
+  font-weight: bold;
+  color:black;
+}
+
+/* Resaltar la opción "En preparación" */
+#id_estadopedido option[value="En preparacion"] {
+  background-color: rgb(217, 244, 255);
+  font-weight: bold;
+  color:black;
+}
+
+/* Resaltar la opción "Entregado" */
+#id_estadopedido option[value="Entregado"] {
+  background-color: rgb(213, 255, 213);
+  font-weight: bold;
+  color:black;
+}
+
+/* Resaltar la opción "En despacho" */
+#id_estadopedido option[value="En Despacho"] {
+  background-color: rgb(221, 221, 221);
+  font-weight: bold;
+  color:black;
+}
+
+/* Resaltar la opción "Cancelado"*/
+#id_estadopedido option[value="Cancelado"] {
+  background-color: rgb(209, 159, 159);
+  font-weight: bold;
+  color:black;
 }

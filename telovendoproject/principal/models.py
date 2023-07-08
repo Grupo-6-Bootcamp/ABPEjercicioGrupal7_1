@@ -88,5 +88,9 @@ class Detalle(models.Model):
     cantidad = models.PositiveIntegerField(null=False)
     valor_unit = models.PositiveIntegerField(null=False)
 
+
+    def cantidad_valor(self):
+        return self.cantidad * self.valor_unit
+
     def __str__(self):
         return f"Detalle - Pedido: {self.pedido}, Producto: {self.productos}"

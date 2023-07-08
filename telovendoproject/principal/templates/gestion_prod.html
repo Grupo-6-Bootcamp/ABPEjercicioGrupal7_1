@@ -31,9 +31,9 @@
             <img src="media/images/producto_default.png" width="100" height="auto">
           </td>
           <td>{{ producto.nombre }}</td>
-          <td>{{ producto.valor_unit }}</td>
+          <td class="valor-unitario text-center" >{{ producto.valor_unit }}</td>
           <td>{{ producto.descripcion }}</td>
-          <td>{{ producto.stock }}</td>
+          <td class="text-center">{{ producto.stock }}</td>
         </tr>
         {% empty %}
         <tr>

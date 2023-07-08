@@ -1,121 +1,49 @@
-{% extends 'base.html' %}
-{%load static %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block body %}
-<!--Wishlist for user template-->
- <h1>Wishlist</h1>
-  
-  <h2>Products:</h2>
-  <ul>
-    {% for producto in productos %}
-      <li>{{ producto.idproducto.nombre }} - Quantity: {{ producto.cantidad_deseada }}</li>
-    {% empty %}
-      <li>No products in the wishlist.</li>
-    {% endfor %}
-  </ul>
-  
-  <h2>Add Product:</h2>
-  <form method="post" action="{% url 'wishlist' %}">
-    {% csrf_token %}
-    <label for="producto">Product:</label>
-    <select name="producto" id="producto">
-      {% for product in available_products %}
-        <option value="{{ product.id }}">{{ product.name }}</option>
-      {% endfor %}
-    </select>
-    <br>
-    <label for="cantidad">Quantity:</label>
-    <input type="number" name="cantidad" id="cantidad">
-    <br>
-    <button type="submit">Add to Wishlist</button>
-  </form>
-  
-  <h2>Update Quantity:</h2>
-  {% for producto in productos %}
-    <form method="post" action="{% url 'wishlist' %}">
+{% block content %}
+<div class="row d-flex justify-content-center">
+  <div class="col-lg-6">
+    <form method="POST" class="form-container blog">
       {% csrf_token %}
-      <input type="hidden" name="producto" value="{{ producto.id }}">
-      <label for="cantidad-{{ producto.id }}">Quantity:</label>
-      <input type="number" name="cantidad" id="cantidad-{{ producto.id }}" value="{{ producto.cantidad_deseada }}">
-      <button type="submit">Update Quantity</button>
-    </form>
-  {% endfor %}
-  
-  <h2>Delete Product:</h2>
-  {% for producto in productos %}
-    <form method="post" action="{% url 'wishlist' %}">
-      {% csrf_token %}
-      <input type="hidden" name="producto" value="{{ producto.id }}">
-      <button type="submit">Delete</button>
-    </form>
-  {% endfor %} 
-
-  {% comment %} <div class="row align-items-center">
-    <div class="col-10 d-flex justify-content-left py-3">
-        <h3>Gestión de Productos</h3>
-    </div>
-    <div class="col-2">
-      <a href="{% url 'nuevo_producto' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Producto</a>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="d-flex justify-content-left">
-        <div class="card w-100">
-            <div class="card-body">
-                <div class="row fw-bold">
-                  <div class="col-1">
-                      Id
-                  </div>
-                  <div class="col-3">
-                      Nombre
-                  </div>
-                  <div class="col-2">
-                    Valor Unitario
-                  </div>
-                  <div class="col-4">
-                    Descripción
-                  </div>
-                  <div class="col-2">
-                    Stock
-                </div>
-              </div>
-            </div>
+      <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-center py-3">
+          <h3 class="titulo">Agregar productos a la wishlist</h3>
         </div>
-    </div>
-  </div>
+      </div>
 
-  {% for producto in productos %}
-  <div class="row">
-    <div class="d-flex justify-content-left">
-        <div class="card w-100">
-            <div class="card-body">
-                <div class="row">
-                  <div class="col-1">
-                      {{ producto.id }}
-                  </div>
-                  <div class="col-3">
-                      {{ producto.nombre }}
-                  </div>
-                  <div class="col-2">
-                    {{ producto.valor_unit }}
-                  </div>
-                  <div class="col-4">
-                    {{ producto.descripcion }}
-                  </div>
-                  <div class="col-2">
-                    {{ producto.stock }}
-                </div>
-              </div>
-            </div>
+      {{ form.as_p }}
+      
+      <button type="submit" class="btn botoncito btn-outline-personal">Agregar Producto</button>
+    </form>
+
+    <div class="form-container blog mt-4">
+      <h3 class="titulo">Productos agregados</h3>
+      <ul>
+        {% for producto_wishlist in productos_wishlist %}
+          <li>
+            {{ producto_wishlist.idproducto.nombre }} - Cantidad Deseada: {{ producto_wishlist.cantidad_deseada }}
+            <form method="post" action="{% url 'wishlist' wishlist_id=wishlist.id%}">
+              {% csrf_token %}
+              <input type="hidden" name="delete" value="{{ producto_wishlist.id }}">
+              <button type="submit" class="btn botoncito-danger btn-outline-personal">Eliminar</button>
+            </form>
+          </li>
+        {% empty %}
+          <li>No se han agregado productos aún.</li>
+        {% endfor %}
+      </ul>
+
+      <p>Valor total productos: ${{ subtotal }}</p>
+
+      <form method="post" class="text-center">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center">
+          <input type="submit" name="regresar" class="btn-form btn btn-danger mr-2" value="Regresar">
+          <input type="submit" name="continuar" class="btn-form btn btn-primary ml-2" value="Continuar">
         </div>
+      </form>
     </div>
   </div>
-  {% empty %}
-  <div class="row">
-    <div class="d-flex justify-content-center">
-      <h4 class="pt-3"><span class="badge text-bg-danger">No hay productos diponibles para esta vista</span></h4>
-    </div>
-  </div>
-  {% endfor %} {% endcomment %}
-{% endblock body%}
+</div>
+{% endblock %}

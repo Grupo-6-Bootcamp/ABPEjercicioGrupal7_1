@@ -1,46 +1,53 @@
-
 {% extends "base.html" %} 
 {% load static %} 
 
-{% block title %}Gestión de productos{% endblock %} 
+{% block title %}Agregar Productos a la Wishlist{% endblock %} 
 
 {% block body %}
-<h1>Agregar Productos a la Wishlist</h1>
 
-<p>Wishlist: {{ wishlist.nombre }}</p>
+<div class="row d-flex justify-content-center">
+  <div class="col-lg-6">
+    <form method="POST" class="form-container blog">
+      {% csrf_token %}
+      <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-center py-3">
+          <h3 class="titulo">Agregar productos a la wishlist</h3>
+        </div>
+      </div>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Agregar Producto</button>
-</form>
+      {{ form.as_p }}
+      
+      <button type="submit" class="btn botoncito btn-outline-personal">Agregar Producto</button>
+    </form>
 
-<h2>Productos Agregados:</h2>
-<ul>
-  {% for producto_wishlist in productos_wishlist %}
-    <li>
-      {{ producto_wishlist.idproducto.nombre }} - Cantidad Deseada: {{ producto_wishlist.cantidad_deseada }}
-      <form method="post" action="{% url 'agregar_productos_wishlist' wishlist_id=wishlist.id %}">
+    <div class="form-container blog mt-4">
+      <h3 class="titulo">Productos agregados</h3>
+      <ul>
+        {% for producto_wishlist in productos_wishlist %}
+          <li>
+            {{ producto_wishlist.idproducto.nombre }} - Cantidad Deseada: {{ producto_wishlist.cantidad_deseada }}
+            <form method="post" action="{% url 'agregar_productos_wishlist' wishlist_id=wishlist.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="delete" value="{{ producto_wishlist.id }}">
+              <button type="submit" class="btn botoncito-danger btn-outline-personal">Eliminar</button>
+            </form>
+          </li>
+        {% empty %}
+          <li>No se han agregado productos aún.</li>
+        {% endfor %}
+      </ul>
+
+      <p>Valor total productos: ${{ subtotal }}</p>
+
+      <form method="post" class="text-center">
         {% csrf_token %}
-        <input type="hidden" name="delete" value="{{ producto_wishlist.id }}">
-        <button type="submit">Eliminar</button>
+        <div class="d-flex justify-content-center">
+          <input type="submit" name="regresar" class="btn-form btn btn-danger mr-2" value="Regresar">
+          <input type="submit" name="continuar" class="btn-form btn btn-primary ml-2" value="Continuar">
+        </div>
       </form>
-    </li>
-  {% empty %}
-    <li>No se han agregado productos aún.</li>
-  {% endfor %}
-</ul>
-
-
-<p>Valor total productos: ${{ subtotal }}</p>
-
-<form method="post">
-  {% csrf_token %}
-  <input type="submit" name="regresar" role="button" class="btn botoncito btn-outline-personal" value="Regresar">
-  {% comment %} <button name="btn-regresar" type="submit" class="btn botoncito btn-outline-personal">Regresar</button> {% endcomment %}
-  <input type="submit" name="continuar" role="button" class="btn botoncito btn-outline-personal" value="Continuar">
-  {% comment %} <button name="btn-continuar" type="submit" class="btn botoncito btn-outline-personal">Continuar</button> {% endcomment %}
-</form>
-
+    </div>
+  </div>
+</div>
 
 {% endblock %}

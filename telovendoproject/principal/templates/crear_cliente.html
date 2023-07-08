@@ -1,62 +1,63 @@
-{% extends "base.html" %} 
-{% load static %} 
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}Creación de cliente externo{% endblock %} 
+{% block title %}Creación de cliente externo{% endblock %}
 
 {% block body %}
-
-<div class="row align-items-center">
-    <div class="col-10 d-flex justify-content-left py-3">
-        <h3>Seleccionar cliente</h3>
-    </div>
-    <div class="col-2">
-        <a href="{% url 'index' %}" class="btn botoncito btn-outline-personal" role="button">Volver</a>
-    </div>
+<div class="row d-flex justify-content-center py-3">
+  <h3 class="titulo">Ingresar nuevo pedido</h3>
 </div>
 
 <div class="row d-flex justify-content-center">
-    <div class="card">
-        <form class="card-body row g-3" method="POST">{% csrf_token %}
-            <select name="cliente_existente" class="form-select" id="cliente_existente">
-                <option selected="selected" disabled>Seleccionar cliente</option>
-                {% for cliente in clientes %}
-                    <option value="{{ cliente.id }}">{{ cliente.nombre }} {{cliente.apellido}}</option>
-                    <!--Redirect to 'agregar_producto_whislist with select client'-->
-                {% endfor %}
-            </select>
-            <div class="row pt-3">
-                <div class="col">
-                    <h5>Crear wishlist para el cliente (requerido)</h5>
-                    {{ wishlist_form.as_p }}
-                </div>
-            </div>
-            <div class="row pt-3">
-                <div class="col">
-                    <input type="submit" class="btn botoncito btn-personal" value="Seleccionar">
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row align-items-center">
-    <div class="col-10 d-flex justify-content-left py-3">
-        <h3>Crear nuevo cliente</h3>
-    </div>
-</div>
-
-<div class="row d-flex justify-content-center">
-    <form class="card p-4" method="POST">{% csrf_token %}
-        {{ form.as_p }} 
-        <p>Crear wishlist para el cliente (requerido)</p>
-        {{ wishlist_form.as_p }}
-        <div class="row pt-4">
-            <div class="col">
-                <input type="submit" class="btn botoncito btn-personal"value="Guardar">
-                <a href="{% url 'pedidos' %}" role="button" class="btn botoncito btn-personal">Cancelar</a>
-            </div>
+  <div class="col-lg-6">
+    <form method="POST" class="form-container blog mb-4">
+      <div class="row align-items-center">
+        <div class="d-flex justify-content-center py-3">
+          <h3 class="titulo">Seleccionar cliente existente</h3>
         </div>
+      </div>
+      {% csrf_token %}
+  
+      <select name="cliente_existente" class="form-select" id="cliente_existente">
+        <option selected disabled>Seleccionar cliente ya existente</option>
+        {% for cliente in clientes %}
+        <option value="{{ cliente.id }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+        {% endfor %}
+      </select>
+      <div class="row pt-3">
+        <div class="col">
+          <h5>Crear wishlist para el cliente (requerido)</h5>
+          {{ wishlist_form.as_p }}
+        </div>
+      </div>
+      <div class="row pt-3">
+        <div class="col">
+          <input type="submit" class="btn botoncito btn-personal" value="Seleccionar">
+        </div>
+      </div>
     </form>
-</div>
 
+    <form method="POST" class="form-container blog mb-4">
+      {% csrf_token %}
+      <div class="row align-items-center">
+        <div class="d-flex justify-content-center py-3">
+          <h3 class="titulo">Ingresar nuevo cliente</h3>
+        </div>
+      </div>
+      {{ form.as_p }}
+      <div class="row pt-3">
+        <div class="col">
+          <h5>Crear wishlist para el cliente (requerido)</h5>
+          {{ wishlist_form.as_p }}
+        </div>
+      </div>
+      <div class="row pt-4">
+        <div class="col">
+          <input type="submit" class="btn botoncito btn-personal" value="Guardar">
+          <a href="{% url 'pedidos' %}" role="button" class="btn botoncito-danger btn-personal">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

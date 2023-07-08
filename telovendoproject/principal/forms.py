@@ -101,9 +101,9 @@ class PedidoForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'class': 'form-control'}),
             'direccion_despacho': forms.TextInput(attrs={'class': 'form-control'}),
             'fecha_despacho': forms.DateInput(format=('%Y-%m-%d'), attrs= {'class':'form-control', 'placeholder': 'Fecha', 'type': 'date'}),
-            'subtotal': forms.TextInput(attrs={'class': 'form-control'}),
-            'valordespacho': forms.TextInput(attrs={'class': 'form-control'}),
-            'valortotal': forms.TextInput(attrs={'class': 'form-control'}),
+            'subtotal': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            'valordespacho': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            'valortotal': forms.TextInput(attrs={'class': 'form-control','readonly': True}),
             'metododepago': forms.Select(attrs={'class': 'form-control'}),
             'estadopedido': forms.Select(attrs={'class': 'form-control'})
         }
