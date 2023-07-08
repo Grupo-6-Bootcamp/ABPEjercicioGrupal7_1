@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Crear Pedido{% endblock %}
 
@@ -22,6 +23,10 @@
                 <p>{{ wishlist.idcliente.email }}</p>
             </div>
             <div class="col-md-6">
+                <label>Fecha de entrega</label>
+                <span>{{ form.fecha_despacho }}</span>
+            </div>
+            <div class="col-md-6">
                 <label>Dirección de facturación</label>
                 <p>{{ wishlist.idcliente.direccion }}</p>
             </div>
@@ -30,12 +35,25 @@
                 <p>{{ form.direccion_despacho }}</p>
             </div>
             <div class="col-md-6">
+                <label>Valor despacho</label>
+                <p>{{ form.valordespacho }}</p>
+            </div>
+            <div class="col-md-6">
+                <label>Subtotal (${{ subtotal|intcomma }})</label>
+                <p>{{ form.subtotal }}</p>
+            </div>
+            <div class="col-md-6">
+                <label>Total</label>
+                <p>{{ form.valortotal }}</p>
+            </div>
+            <div class="col-md-6">
                 <label>Medio de pago</label>
                 {{ form.metododepago }}
             </div>
-            <div class="col-md-6">
-                <label>Subtotal</label>
-                <p>{{ subtotal }}</p>
+            <div class="col-12">
+                <label>Estado del despacho</label>
+                {{ form.estadopedido }}
+            </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Guardar</button>
                 <a href="{% url 'pedidos' %}" class="btn btn-danger">Cancelar</a>

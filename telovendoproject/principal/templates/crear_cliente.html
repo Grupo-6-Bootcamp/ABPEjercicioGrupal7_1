@@ -1,4 +1,3 @@
-
 {% extends "base.html" %} 
 {% load static %} 
 
@@ -15,42 +14,48 @@
     </div>
 </div>
 
-<div class="row">
-    <form method="POST">
-        <div class="col d-flex justify-content-left py-3">
-            {% csrf_token %}
+<div class="row d-flex justify-content-center">
+    <div class="card">
+        <form class="card-body row g-3" method="POST">{% csrf_token %}
             <select name="cliente_existente" class="form-select" id="cliente_existente">
                 <option selected="selected" disabled>Seleccionar cliente</option>
                 {% for cliente in clientes %}
                     <option value="{{ cliente.id }}">{{ cliente.nombre }} {{cliente.apellido}}</option>
-                    
                     <!--Redirect to 'agregar_producto_whislist with select client'-->
                 {% endfor %}
             </select>
-            
-                {% comment %} <input type="submit" class="btn btn-primary"> {% endcomment %}
-        </div>
-        <div class="col">
-            <p>Crear wishlist para el cliente</p>
-            {{ wishlist_form.as_p }}
-            <input type="submit" class="btn" value="Seleccionar">
-        </div>
-    </form>
+            <div class="row pt-3">
+                <div class="col">
+                    <h5>Crear wishlist para el cliente (requerido)</h5>
+                    {{ wishlist_form.as_p }}
+                </div>
+            </div>
+            <div class="row pt-3">
+                <div class="col">
+                    <input type="submit" class="btn botoncito btn-personal" value="Seleccionar">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="row align-items-center">
-    <div class="col-12 d-flex justify-content-left py-3">
-        <h3>Cliente nuevo</h3>
+    <div class="col-10 d-flex justify-content-left py-3">
+        <h3>Crear nuevo cliente</h3>
     </div>
 </div>
 
 <div class="row d-flex justify-content-center">
-    <form class="card col-lg-5 p-4" method="POST">{% csrf_token %}
+    <form class="card p-4" method="POST">{% csrf_token %}
         {{ form.as_p }} 
-        <p>Crear wishlist para el cliente</p>
+        <p>Crear wishlist para el cliente (requerido)</p>
         {{ wishlist_form.as_p }}
-        <input type="submit" class="btn botoncito btn-personal"value="Guardar">
-        <a href="{% url 'pedidos' %}" role="button" class="btn botoncito btn-personal">Cancelar</a>
+        <div class="row pt-4">
+            <div class="col">
+                <input type="submit" class="btn botoncito btn-personal"value="Guardar">
+                <a href="{% url 'pedidos' %}" role="button" class="btn botoncito btn-personal">Cancelar</a>
+            </div>
+        </div>
     </form>
 </div>
 

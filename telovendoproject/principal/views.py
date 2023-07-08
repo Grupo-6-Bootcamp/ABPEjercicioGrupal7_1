@@ -1,3 +1,4 @@
+import contextlib
 import datetime
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -89,8 +90,8 @@ class CrearClienteView(View):
         wishlist_form = WishlistForm()
         clientes = Cliente.objects.all()
         context = {'form': form,
-                   'wishlist_form': wishlist_form,
-                   'clientes': clientes}
+                'wishlist_form': wishlist_form,
+                'clientes': clientes}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -192,14 +193,12 @@ class CrearPedidoView(View):
     def post(self, request, wishlist_id, cliente_id):
         form = self.form_class(request.POST)
         if form.is_valid():
-            pedido = Pedido()
-            pedido.valordespacho = 5000
-            pedido.idcliente = Cliente.objects.get(id=cliente_id)
-            pedido.idwishlist = Wishlist.objects.get(id=wishlist_id)
-            pedido.subtotal = 50.000
-            pedido.fecha_despacho = datetime.date(2021, 5, 5)
-            pedido.valortotal = pedido.subtotal + pedido.valordespacho
-            pedido.estado = 'Pendiente'
+            pedido = form.save()
+            # pedido.valordespacho = 5000
+            # pedido.idcliente = Cliente.objects.get(id=cliente_id)
+            pedido.wishlist_id = Wishlist.objects.get(id=wishlist_id)
+            # pedido.valortotal = pedido.subtotal + pedido.valordespacho
+            # pedido.estado = 'Pendiente'
             pedido.save()
             return redirect(self.reverse_lazy)
         else:
@@ -219,12 +218,20 @@ class CrearPedidoView(View):
         return render(request, self.template_name, context)
 
     def calculate_subtotal(self, productos_wishlist):
-        subtotal = 0
-        for producto_wishlist in productos_wishlist:
-            subtotal += producto_wishlist.idproducto.valor_unit * \
-                producto_wishlist.cantidad_deseada
-        return subtotal
+        return sum(
+            producto_wishlist.idproducto.valor_unit
+            * producto_wishlist.cantidad_deseada
+            for producto_wishlist in productos_wishlist
+        )
 
+
+class PedidosList(ListView):
+    model = Pedido
+    context_object_name = 'pedidos'
+    template_name = 'pedidos.html'
+    
+    def get_queryset(self):
+        return super().get_queryset()
 
 class WishList(TemplateView, LoginRequiredMixin):
     """Clase para que el usuario si intermediacion pueda acceder a la wishlist"""
@@ -270,11 +277,9 @@ class PanelUsuario(View, LoginRequiredMixin):
     def get(self, request):
         usuario = User.objects.get(id=request.user.id)
         form = self.form(initial={'email': usuario.email})
-        try:
+        with contextlib.suppress(Exception):
             cliente = Cliente.objects.get(idusuario=request.user.id)
             form = self.form(instance=cliente)
-        except:
-            pass
         context = {"form": form}
         return render(request, "panel_usuario.html", context)
 
@@ -304,8 +309,7 @@ class ProductList(ListView):
     template_name = 'product_list.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset
+        return super().get_queryset()
 
 
 class ProductDetail(DetailView):

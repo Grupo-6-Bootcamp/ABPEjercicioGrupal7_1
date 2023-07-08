@@ -76,6 +76,9 @@ class WishlistForm(forms.ModelForm):
     class Meta:
         model = Wishlist
         fields = ['nombre_wishlist']
+        widgets = {
+            'nombre_wishlist': forms.DateInput(attrs={'class': 'form-control'})
+        }
 
 
 class ProductoWishlistForm(forms.ModelForm):
@@ -84,38 +87,23 @@ class ProductoWishlistForm(forms.ModelForm):
         exclude = ['idwishlist']
 
 
-class PedidoForm(forms.ModelForm):
+# class DetallePedidoForm(forms.ModelForm):
+#     class Meta:
+#         model = Pedido
+#         fields = ['direccion_despacho', 'metododepago',]
 
+class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['direccion_despacho', 'metododepago',]
-
-
-# class Pedido(models.Model):
-#     METODOPAGO_CHOICES = [
-#         ('Transferencia', 'Transferencia'),
-#         ('Tarjeta de Credito', 'Tarjeta de Crédito'),
-#         ('Tarjeta de Debito', 'Tarjeta de Débito')
-#     ]
-#     ESTADO_CHOICES = [
-#         ('Pendiente', 'Pendiente'),
-#         ('En preparacion', 'En preparación'),
-#         ('Entregado', 'Entregado'),
-#         ('En Despacho', 'En Despacho'),
-#     ]
-
-    # wishlist = models.ForeignKey(
-    #     Wishlist, null=True, blank=True, on_delete=models.SET_NULL)
-    # fecha = models.DateField(auto_now_add=True)
-    # direccion_despacho = models.CharField(max_length=100)
-    # fecha_despacho = models.DateTimeField(null=False)
-    # subtotal = models.PositiveIntegerField(null=False)
-    # valordespacho = models.PositiveIntegerField(null=False)
-    # valortotal = models.PositiveIntegerField(null=False)
-    # metododepago = models.CharField(
-    #     null=False, max_length=50, choices=METODOPAGO_CHOICES)
-    # estadopedido = models.CharField(
-    #     null=False, max_length=50, choices=ESTADO_CHOICES)
-
-    # def __str__(self):
-    #     return str(self.id)
+        fields = ['direccion_despacho', 'fecha_despacho', 'subtotal', 'valordespacho',
+                    'valortotal', 'metododepago', 'estadopedido']
+        widgets = {
+            'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+            'direccion_despacho': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_despacho': forms.DateInput(format=('%Y-%m-%d'), attrs= {'class':'form-control', 'placeholder': 'Fecha', 'type': 'date'}),
+            'subtotal': forms.TextInput(attrs={'class': 'form-control'}),
+            'valordespacho': forms.TextInput(attrs={'class': 'form-control'}),
+            'valortotal': forms.TextInput(attrs={'class': 'form-control'}),
+            'metododepago': forms.Select(attrs={'class': 'form-control'}),
+            'estadopedido': forms.Select(attrs={'class': 'form-control'})
+        }

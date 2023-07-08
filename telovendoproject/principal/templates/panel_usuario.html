@@ -7,22 +7,20 @@
 {% block body %}
 
 <div class="row align-items-center">
-    <div class="col-10 d-flex justify-content-left py-3">
-        <h3>Panel de usuario</h3>
-    </div>
-    <div class="col-2">
-      <a href="{% url 'index' %}" class="btn botoncito btn-outline-personal" role="button">Volver</a>
-    </div>
+  <div class="col-10 d-flex justify-content-left py-3">
+      <h3>Panel de usuario</h3>
   </div>
-      <div class="row d-flex justify-content-center">
-        <form class="card col-lg-5 p-4" method="POST">{% csrf_token %}
-          {{ form.as_p }} 
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <button href="{% url 'index' %}" class="btn btn-danger">Cancelar</button>
-        </form>
-    </div>
-    
-    </div>
+  <div class="col-2">
+    <a href="{% url 'index' %}" class="btn botoncito btn-outline-personal" role="button">Volver</a>
   </div>
+</div>
+
+<div class="row d-flex justify-content-center">
+  <form class="card col-lg-5 p-4" method="POST">{% csrf_token %}
+    {{ form.as_p }} 
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button href="{% url 'index' %}" class="btn btn-danger">Cancelar</button>
+  </form>
+</div>
 
 {% endblock %}

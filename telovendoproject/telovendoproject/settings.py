@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'principal',
     'authenticate',
 ]
@@ -129,6 +130,10 @@ LANGUAGE_CODE = 'es-cl'
 TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
+
+USE_L10N = True
+# USE_THOUSAND_SEPARATOR = True
+# THOUSAND_SEPARATOR = '.'
 
 USE_TZ = True
 
