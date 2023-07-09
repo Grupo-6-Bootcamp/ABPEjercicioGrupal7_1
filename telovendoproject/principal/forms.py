@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Pedido, Producto, Wishlist, ProductoWishlist
+from .models import Cliente, Pedido, Producto, Wishlist, ProductoWishlist, Detalle
 
 
 class EstadoPedidoForm(forms.ModelForm):
@@ -107,3 +107,13 @@ class PedidoForm(forms.ModelForm):
             'metododepago': forms.Select(attrs={'class': 'form-control'}),
             'estadopedido': forms.Select(attrs={'class': 'form-control'})
         }
+
+# class DetalleForm(forms.ModelForm):
+#     class Meta:
+#         model = Detalle
+#         fields = ['producto', 'cantidad']
+#         widgets = {
+#             'producto': forms.Select(attrs={'class': 'form-control'}),
+#             'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
+#         }
+# 

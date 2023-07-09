@@ -31,10 +31,51 @@
                             {{ producto.descripcion }}
                         </li>
                     </ul>
+                    
+                    <div class="text-center mt-3">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <button class="btn btn-secondary" id="minus-btn" type="button">-</button>
+                          </span>
+                          <input type="text" id="quantity-input" class="form-control input-sm" value="0" readonly>
+                          <span class="input-group-btn">
+                            <button class="btn btn-secondary" id="plus-btn" type="button">+</button>
+                          </span>
+                        </div>
+                        <button class="btn btn-success">Agregar a Wishlist</button>
+                      </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var minusBtn = document.getElementById('minus-btn');
+        var plusBtn = document.getElementById('plus-btn');
+        var quantityInput = document.getElementById('quantity-input');
+        var wishlistBtn = document.getElementById('wishlist-btn');
+
+        var quantity = 0;
+
+        minusBtn.addEventListener('click', function() {
+            if (quantity > 0) {
+                quantity--;
+                quantityInput.value = quantity;
+                wishlistBtn.disabled = (quantity === 0);
+            }
+        });
+
+        plusBtn.addEventListener('click', function() {
+            if (quantity < 10) {
+                quantity++;
+                quantityInput.value = quantity;
+                wishlistBtn.disabled = (quantity === 0);
+            }
+        });
+    });
+</script>
 
 {% endblock  %}

@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle, Cliente
-from .forms import ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm, PedidoForm, ClienteExternoForm
+from .forms import ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm, PedidoForm, ClienteExternoForm #DetalleForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
@@ -21,9 +21,6 @@ User = get_user_model()
 
 def index(request):
     return render(request, "index.html")
-
-
-
 
 @method_decorator(staff_member_required, name='dispatch')
 class PedidosView(View):
@@ -43,33 +40,6 @@ class GestionProdView(View):
         context = {'productos': productos}
         return render(request, self.template_name, context=context)
 
-
-class PedidoDetalleView(View):
-    template_name: 'detalle_pedido.html'
-
-    def get(self, request, pk):
-        pedido = get_object_or_404(Pedido, pk=pk)
-        form = EstadoPedidoForm(instance=pedido)
-        context = {'pedido': pedido,
-                   "form": form}
-        try:
-            detalle = Detalle.objects.filter(pedido=pedido)
-            print("detalles  ", detalle)
-            context["detalle"] = detalle 
-        except Detalle.DoesNotExist:
-            pass
-        return render(request, 'detalle_pedido.html', context)
-
-    def post(self, request, pk):
-        pedido = get_object_or_404(Pedido, pk=pk)
-        form = EstadoPedidoForm(request.POST, instance=pedido)
-        if form.is_valid():
-            pedido = form.save(commit=False)
-            pedido.estadopedido = form.cleaned_data['estadopedido']
-            pedido.save()
-            return redirect('pedidos')
-
-
 class IngresoProductoView(View):
     template_name = 'nuevo_producto.html'
 
@@ -85,11 +55,9 @@ class IngresoProductoView(View):
             producto.save()
             return redirect('gestionprod')
 
-
 def test01(request):
 
     return render(request, "ecommerce/index.html")
-
 
 class CrearClienteView(View):
     template_name = 'crear_cliente.html'
@@ -116,7 +84,6 @@ class CrearClienteView(View):
         wishlist.idcliente = cliente
         wishlist.save()
         return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
-
 
 class AgregarProductosWishlistView(View):
     template_name = 'agregar_productos_wishlist.html'
@@ -172,7 +139,6 @@ class AgregarProductosWishlistView(View):
             'subtotal': subtotal
         }
         return render(request, self.template_name, context)
-
 
 
 class CrearPedidoView(View):
@@ -257,8 +223,6 @@ class PedidosList(ListView):
     
     def get_queryset(self):
         return super().get_queryset()
-
-
 
 
 class WishList(TemplateView, LoginRequiredMixin):
@@ -388,3 +352,163 @@ class ProductDetail(DetailView):
 class ContactView(View):
     def get(self, request):
         return render(request, 'contacto.html')
+    
+## Ejercicio Grupal 5
+## Permitirá que los usuarios generales puedan registrar nuevos pedidos asociados a ellos como clientes.
+#
+## Vista que permite crear el pedido 
+#class CreatePedidoView(View):
+#    form_class = PedidoForm
+#    template_name = 'pedido_cliente_registrado.html'
+#
+#    def get(self, request):
+#        pedido_form = PedidoForm()
+#        detalle_form = DetalleForm()
+#        return render(request, 'crear_pedido.html', {'pedido_form': pedido_form, 'detalle_form': detalle_form})
+#
+#    def post(self, request):
+#        pedido_form = PedidoForm(request.POST)
+#        detalle_form = DetalleForm(request.POST)
+#        
+#        if pedido_form.is_valid() and detalle_form.is_valid():
+#            pedido = pedido_form.save()
+#            detalle = detalle_form.save(commit=False)
+#            detalle.pedido = pedido
+#            detalle.save()
+#            return redirect('detalle_pedido', pedido_id=pedido.id)
+#        return render(request, 'crear_pedido.html', {'pedido_form': pedido_form, 'detalle_form': detalle_form})
+#
+#
+##  Vista para agregar productos al carro de compras
+#class AgregarProductoView(View):
+#    def post(self, request, pedido_id):
+#        pedido = Pedido.objects.get(id=pedido_id)
+#        form = DetalleForm(request.POST)
+#        if form.is_valid():
+#            detalle = form.save(commit=False)
+#            detalle.pedido = pedido
+#            detalle.save()
+#            return redirect('detalle_pedido', pedido_id=pedido.id)
+#        return render(request, 'detalle_pedido.html', {'pedido': pedido, 'form': form})
+#
+##  Vista del detalle del carrito de compras
+#class CarritoCompraView(View):
+#    def get(self, request):
+#        # Obtener los productos agregados al carrito del usuario
+#        carrito = request.session.get('carrito', {})
+#        productos = []
+#        total = 0
+#
+#        # Obtener información de los productos agregados al carrito
+#        for producto_id, cantidad in carrito.items():
+#            producto = Producto.objects.get(pk=producto_id)
+#            subtotal = producto.valor_unit * cantidad
+#            total += subtotal
+#            productos.append({
+#                'producto': producto,
+#                'cantidad': cantidad,
+#                'subtotal': subtotal
+#            })
+#
+#        context = {
+#            'productos': productos,
+#            'total': total
+#        }
+#
+#        return render(request, 'carrito_compra.html', context)
+#
+#    def post(self, request):
+#        # Obtener los productos agregados al carrito del usuario
+#        carrito = request.session.get('carrito', {})
+#        productos = []
+#
+#        # Crear un nuevo pedido
+#        pedido = Pedido()
+#        pedido.save()
+#
+#        # Guardar los detalles de los productos en el pedido
+#        for producto_id, cantidad in carrito.items():
+#            producto = Producto.objects.get(pk=producto_id)
+#            subtotal = producto.valor_unit * cantidad
+#
+#            detalle = Detalle(
+#                pedido=pedido,
+#                producto=producto,
+#                cantidad=cantidad,
+#                valor_unit=producto.valor_unit,
+#            )
+#            detalle.save()
+#
+#            productos.append({
+#                'producto': producto,
+#                'cantidad': cantidad,
+#                'subtotal': subtotal
+#            })
+#
+#        # Limpiar el carrito
+#        request.session['carrito'] = {}
+#
+#        context = {
+#            'pedido': pedido,
+#            'productos': productos
+#        }
+#
+#        return redirect('confirmar_compra')
+#
+## Vista para confirmar datos y pasar al pago 
+#class ConfirmarCompraView(View):
+#    def get(self, request):
+#        # Obtener el pedido a confirmar
+#        pedido_id = request.session.get('pedido_id')
+#        pedido = Pedido.objects.get(pk=pedido_id)
+#
+#        context = {
+#            'pedido': pedido
+#        }
+#
+#        return render(request, 'confirmar_compra.html', context)
+#
+#    def post(self, request):
+#        # Obtener el pedido a confirmar
+#        pedido_id = request.session.get('pedido_id')
+#        pedido = Pedido.objects.get(pk=pedido_id)
+#
+#        # Obtener la información de despacho ingresada por el cliente
+#        direccion_despacho = request.POST.get('direccion_despacho')
+#        fecha_despacho = request.POST.get('fecha_despacho')
+#
+#        # Guardar la información de despacho en el pedido
+#        pedido.direccion_despacho = direccion_despacho
+#        pedido.fecha_despacho = fecha_despacho
+#        pedido.save()
+#
+#        return redirect('metodo_pago')
+#
+#
+##  Vista para seleccionar forma de pago y generar el pedido
+#class MetodoPagoView(View):
+#    def get(self, request):
+#        # Obtener el pedido a procesar el pago
+#        pedido_id = request.session.get('pedido_id')
+#        pedido = Pedido.objects.get(pk=pedido_id)
+#
+#        context = {
+#            'pedido': pedido
+#        }
+#
+#        return render(request, 'metodo_pago.html', context)
+#
+#    def post(self, request):
+#        # Obtener el pedido a procesar el pago
+#        pedido_id = request.session.get('pedido_id')
+#        pedido = Pedido.objects.get(pk=pedido_id)
+#
+#        # Obtener el método de pago seleccionado por el cliente
+#        metodo_pago = request.POST.get('metodo_pago')
+#
+#        # Guardar el método de pago en el pedido
+#        pedido.metodo_pago = metodo_pago
+#        pedido.save()
+#
+#        return redirect('exito_compra')
+#
