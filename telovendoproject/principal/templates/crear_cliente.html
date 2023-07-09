@@ -19,7 +19,7 @@
       {% csrf_token %}
   
       <select name="cliente_existente" class="form-select" id="cliente_existente">
-        <option selected disabled>Seleccionar cliente ya existente</option>
+        <option selected disabled>Seleccionar cliente existente</option>
         {% for cliente in clientes %}
         <option value="{{ cliente.id }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
         {% endfor %}

@@ -25,3 +25,10 @@ telovendoproject/telovendoproject/__pycache__/settings.cpython-311.pyc
 telovendoproject/telovendoproject/__pycache__/urls.cpython-311.pyc
 telovendoproject/telovendoproject/__pycache__/wsgi.cpython-311.pyc
 
+telovendoproject/principal/__pycache__/__init__.cpython-311.pyc
+telovendoproject/principal/__pycache__/admin.cpython-311.pyc
+telovendoproject/principal/__pycache__/apps.cpython-311.pyc
+telovendoproject/principal/__pycache__/forms.cpython-311.pyc
+telovendoproject/principal/__pycache__/models.cpython-311.pyc
+telovendoproject/principal/__pycache__/urls.cpython-311.pyc
+telovendoproject/principal/__pycache__/views.cpython-311.pyc
