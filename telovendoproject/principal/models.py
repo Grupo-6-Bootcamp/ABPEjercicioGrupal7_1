@@ -41,7 +41,21 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return self.idcliente
-
+    
+    def total_productos(self):
+        cantidad = 0
+        producto_wishlists = ProductoWishlist.objects.filter(idwishlist=self)
+        for producto in producto_wishlists:
+            cantidad += producto.cantidad_deseada
+        return cantidad
+    
+    def valor_total(self):
+        total = 0
+        producto_wishlists = ProductoWishlist.objects.filter(idwishlist=self)
+        for producto_wishlist in producto_wishlists:
+            valor = producto_wishlist.cantidad_deseada * producto_wishlist.idproducto.valor_unit
+            total += valor
+        return total
 
 class ProductoWishlist(models.Model):
     idwishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
@@ -50,6 +64,9 @@ class ProductoWishlist(models.Model):
 
     def __str__(self):
         return f"Wishlist: {self.idwishlist} - {self.idwishlist.idcliente.nombre}"
+    
+    def valor_total(self):
+        return self.cantidad_deseada * self.idproducto.valor_unit
 
 
 class Pedido(models.Model):

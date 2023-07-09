@@ -6,12 +6,12 @@ from . import views
 from .views import *
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('pedidos', PedidosView.as_view(), name='pedidos'),
     path('gestion', GestionProdView.as_view(), name="gestionprod"),
     path('nuevo_producto', IngresoProductoView.as_view(), name="nuevo_producto"),
     path('test01/', views.test01, name='test01'),
-    path('wishlist/', WishList.as_view(), name="wishlist"),
+    # path('wishlist/', WishList.as_view(), name="wishlist"),
     path('crear_cliente/', CrearClienteView.as_view(), name="crear_cliente"),
     path('agregar_productos_wishlist/<int:wishlist_id>/', AgregarProductosWishlistView.as_view(), name="agregar_productos_wishlist"),
     path('crear_pedido/<int:wishlist_id>/<int:cliente_id>/', CrearPedidoView.as_view(), name='crear_pedido'),
@@ -19,6 +19,8 @@ urlpatterns = [
     path('productos', ProductList.as_view(), name='productos'),
     path('producto/<int:pk>/', ProductDetail.as_view(), name='producto'),
     path('contacto/', ContactView.as_view(), name="contacto"),
+    path('mis_wishlist/', ListaWishListView.as_view(), name="user_wishlist"),
+    path('wishlist_detalle/<int:wishlist_id>/', WishlistDetalleView.as_view(), name="wishlist_detalle"),
 
 # Grupal 5: vistas para crear el pedido del usuario registrado
 

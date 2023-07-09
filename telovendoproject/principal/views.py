@@ -19,8 +19,17 @@ from django.contrib import messages
 User = get_user_model()
 
 
-def index(request):
-    return render(request, "index.html")
+
+class IndexView(View):
+    def get(self, request):
+        user = User.objects.get(id=request.user.id)
+        context = {"user": user}
+        try:
+            cliente = Cliente.objects.get(idusuario=user)
+            context["cliente"] = cliente
+        except Cliente.DoesNotExist:
+            pass
+        return render(request, "index.html", context)
 
 @method_decorator(staff_member_required, name='dispatch')
 class PedidosView(View):
@@ -40,6 +49,7 @@ class GestionProdView(View):
         context = {'productos': productos}
         return render(request, self.template_name, context=context)
 
+## Ingresar productos como staff
 class IngresoProductoView(View):
     template_name = 'nuevo_producto.html'
 
@@ -59,6 +69,7 @@ def test01(request):
 
     return render(request, "ecommerce/index.html")
 
+## Crear cliente y su wishlist como staff
 class CrearClienteView(View):
     template_name = 'crear_cliente.html'
 
@@ -85,6 +96,7 @@ class CrearClienteView(View):
         wishlist.save()
         return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
 
+## Agrega productos a la wishlist recien creada como staff
 class AgregarProductosWishlistView(View):
     template_name = 'agregar_productos_wishlist.html'
 
@@ -111,6 +123,7 @@ class AgregarProductosWishlistView(View):
 
     def post(self, request, wishlist_id):
         wishlist = Wishlist.objects.get(id=wishlist_id)
+        form = ProductoWishlistForm(request.POST)
         if request.POST.get('delete'):
             product_id = request.POST.get('delete')
             ProductoWishlist.objects.filter(id=product_id).delete()
@@ -119,8 +132,9 @@ class AgregarProductosWishlistView(View):
             return redirect('crear_cliente')
         elif request.POST.get('continuar'):
             return redirect('crear_pedido', wishlist_id=wishlist_id, cliente_id=wishlist.idcliente.id)
+        elif request.POST.get('guardar_wishlist'):
+            return redirect('wishlist_detalle', wishlist_id)
 
-        form = ProductoWishlistForm(request.POST)
         if form.is_valid():
             producto_wishlist = form.save(commit=False)
             wishlist = Wishlist.objects.get(id=wishlist_id)
@@ -141,6 +155,7 @@ class AgregarProductosWishlistView(View):
         return render(request, self.template_name, context)
 
 
+## Crear pedido como staff
 class CrearPedidoView(View):
     template_name = "crear_pedido.html"
     form_class = PedidoForm
@@ -225,73 +240,136 @@ class PedidosList(ListView):
         return super().get_queryset()
 
 
-class WishList(TemplateView, LoginRequiredMixin):
-    template_name = "ecommerce/wishlist.html"
+# class WishList(TemplateView, LoginRequiredMixin):
+#     template_name = "ecommerce/wishlist.html"
 
-    def calculate_subtotal(self, productos_wishlist):
-        return sum(
-            producto_wishlist.idproducto.valor_unit
-            * producto_wishlist.cantidad_deseada
-            for producto_wishlist in productos_wishlist
-        )
+#     def calculate_subtotal(self, productos_wishlist):
+#         return sum(
+#             producto_wishlist.idproducto.valor_unit
+#             * producto_wishlist.cantidad_deseada
+#             for producto_wishlist in productos_wishlist
+#         )
 
-    def get(self, request,  wishlist_id):
-        # Verificar si el usuario es un cliente
-        if not Cliente.objects.filter(idusuario=request.user.id).exists():
-            alert = "Si desea acceder a la wishlist, primero debe registrarse como cliente"
+#     def dispatch(self, request, *args, **kwargs):
+#         # Verificar si el usuario es un cliente
+#         self.usuario = request.user
+#         if not Cliente.objects.filter(idusuario=request.user.id).exists():
+#             alert = "Si desea acceder a la wishlist, primero debe registrar sus datos como cliente"
+#             messages.error(request, alert)
+#             return redirect("panel_usuario")
+#         return super().dispatch(request, *args, **kwargs)
+
+#     def get(self, request,  wishlist_id):
+#         # Obtener o crear la wishlist del cliente
+#         try:
+#             wishlist = Wishlist.objects.get(id=wishlist_id)
+#         except Wishlist.DoesNotExist:
+#             usuario = User.objects.get(id=request.user.id, nombre=request.user.nombre, apellido=request.user.apellido)
+#             wishlist = Wishlist.objects.create(idcliente=usuario.id, nombre_wishlist="Wishlist de " + usuario.nombre + " " + usuario.apellido)
+#             wishlist.save()
+        
+#         productos_wishlist = ProductoWishlist.objects.filter(idwishlist=wishlist)
+#         subtotal = self.calculate_subtotal(productos_wishlist)
+#         form = ProductoWishlistForm()
+#         context = {
+#             'form': form,
+#             'wishlist': wishlist,
+#             'productos_wishlist': productos_wishlist,
+#             'subtotal': subtotal
+#         }
+#         return render(request, self.template_name, context)
+
+#     def post(self, request, wishlist_id):
+#         wishlist = Wishlist.objects.get(id=wishlist_id)
+#         if request.POST.get('delete'):
+#             product_id = request.POST.get('delete')
+#             ProductoWishlist.objects.filter(id=product_id).delete()
+#             return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
+#         elif request.POST.get('regresar'):
+#             return redirect('crear_cliente')
+#         elif request.POST.get('continuar'):
+#             return redirect('crear_pedido', wishlist_id=wishlist_id, cliente_id=wishlist.idcliente.id)
+
+#         form = ProductoWishlistForm(request.POST)
+#         if form.is_valid():
+#             producto_wishlist = form.save(commit=False)
+#             wishlist = Wishlist.objects.get(id=wishlist_id)
+#             producto_wishlist.idwishlist = wishlist
+#             producto_wishlist.save()
+#             return redirect('agregar_productos_wishlist', wishlist_id=wishlist_id)
+
+#         wishlist = Wishlist.objects.get(id=wishlist_id)
+#         productos_wishlist = ProductoWishlist.objects.filter(
+#             idwishlist=wishlist)
+#         subtotal = self.calculate_subtotal(productos_wishlist)
+#         context = {
+#             'form': form,
+#             'wishlist': wishlist,
+#             'productos_wishlist': productos_wishlist,
+#             'subtotal': subtotal
+#         }
+#         return render(request, self.template_name, context)
+
+
+class ListaWishListView(TemplateView, LoginRequiredMixin):
+    template_name = "lista_wishlist.html"
+    ## Dispatch se ejecuta primero que cualquier metodo y settea variables desde el comienzo, en este caso el self.usuario a partir del request.user
+    def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.get(id=request.user.id)
+        try: 
+            self.cliente = Cliente.objects.get(idusuario=self.usuario)
+        except Cliente.DoesNotExist:
+            alert = "Si desea acceder a la wishlist, primero debe registrar sus datos como cliente"
             messages.error(request, alert)
             return redirect("panel_usuario")
-        
-        # Obtener o crear la wishlist del cliente
-        try:
-            wishlist = Wishlist.objects.get(id=wishlist_id)
-        except Wishlist.DoesNotExist:
-            usuario = User.objects.get(id=request.user.id, nombre=request.user.nombre, apellido=request.user.apellido)
-            wishlist = Wishlist.objects.create(idcliente=usuario.id, nombre_wishlist="Wishlist de " + usuario.nombre + " " + usuario.apellido)
-            wishlist.save()
-        
-        productos_wishlist = ProductoWishlist.objects.filter(idwishlist=wishlist)
-        subtotal = self.calculate_subtotal(productos_wishlist)
-        form = ProductoWishlistForm()
-        context = {
-            'form': form,
-            'wishlist': wishlist,
-            'productos_wishlist': productos_wishlist,
-            'subtotal': subtotal
-        }
-        return render(request, self.template_name, context)
+        return super().dispatch(request, *args, **kwargs)
 
+    def get(self, request):
+        wishlist_form = WishlistForm()
+        wishlists = Wishlist.objects.filter(idcliente=self.cliente)
+        context = {"wishlists": wishlists,
+                   "cliente": self.cliente,
+                   'wishlist_form': wishlist_form,}
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        wishlist_form = WishlistForm(request.POST)
+        if request.POST.get('crear_wishlist'):
+            if wishlist_form.is_valid():
+                wishlist = wishlist_form.save(commit=False)
+                wishlist.idcliente = self.cliente
+                wishlist.save()
+                return redirect('user_wishlist')
+            return redirect('index')
+        
+class WishlistDetalleView(TemplateView, LoginRequiredMixin):
+    template_name = "wishlist_detalle.html"
+    def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.get(id=request.user.id)
+        try: 
+            self.cliente = Cliente.objects.get(idusuario=self.usuario)
+        except Cliente.DoesNotExist:
+            alert = "Si desea acceder a la wishlist, primero debe registrar sus datos como cliente"
+            messages.error(request, alert)
+            return redirect("panel_usuario")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, wishlist_id):
+        wishlist = Wishlist.objects.get(id=wishlist_id)
+        context = {"wishlist": wishlist,
+                   "cliente": self.cliente}
+        return render(request, self.template_name, context)
+    
     def post(self, request, wishlist_id):
         wishlist = Wishlist.objects.get(id=wishlist_id)
         if request.POST.get('delete'):
             product_id = request.POST.get('delete')
             ProductoWishlist.objects.filter(id=product_id).delete()
-            return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
-        elif request.POST.get('regresar'):
-            return redirect('crear_cliente')
-        elif request.POST.get('continuar'):
-            return redirect('crear_pedido', wishlist_id=wishlist_id, cliente_id=wishlist.idcliente.id)
-
-        form = ProductoWishlistForm(request.POST)
-        if form.is_valid():
-            producto_wishlist = form.save(commit=False)
-            wishlist = Wishlist.objects.get(id=wishlist_id)
-            producto_wishlist.idwishlist = wishlist
-            producto_wishlist.save()
-            return redirect('agregar_productos_wishlist', wishlist_id=wishlist_id)
-
-        wishlist = Wishlist.objects.get(id=wishlist_id)
-        productos_wishlist = ProductoWishlist.objects.filter(
-            idwishlist=wishlist)
-        subtotal = self.calculate_subtotal(productos_wishlist)
-        context = {
-            'form': form,
-            'wishlist': wishlist,
-            'productos_wishlist': productos_wishlist,
-            'subtotal': subtotal
-        }
-        return render(request, self.template_name, context)
-
+            return redirect('wishlist_detalle', wishlist_id=wishlist.id)
+        if request.POST.get('delete_wishlist'):
+            wishlist_id = request.POST.get('delete_wishlist')
+            Wishlist.objects.get(id=wishlist_id).delete()
+            return redirect('user_wishlist')
 
 
 class PanelUsuario(View, LoginRequiredMixin):

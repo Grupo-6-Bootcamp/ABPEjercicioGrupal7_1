@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ wishlist.nombre_wishlist }} {% endblock %}
+
+{% block body %}
+
+
+<div class="row align-items-center">
+  <div class="d-flex justify-content-center py-3">
+    <h3 class="titulo">Detalles de {{ wishlist.nombre_wishlist }}</h3>
+  </div>
+
+  <div class="col-12 d-flex justify-content-end py-4">
+    <a href="{% url 'agregar_productos_wishlist' wishlist.id %}" class="btn botoncito btn-outline-personal" role="button">Agregar Productos</a>
+    <form method="post" action="{% url 'wishlist_detalle' wishlist_id=wishlist.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="delete_wishlist" value="{{ wishlist.id }}">
+      <button type="submit" class="btn botoncito-danger btn-outline-personal">Eliminar Wishlist</button>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Valor Unitario</th>
+        <th>Valor Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in wishlist.productowishlist_set.all %}
+      <tr>
+        <td>{{ producto.idproducto }}</td>
+        <td>{{ producto.cantidad_deseada }}</td>
+        <td>{{ producto.idproducto.valor_unit }}</td>
+        <th>{{ producto.valor_total }}</th>
+        <td>
+          <form method="post" action="{% url 'wishlist_detalle' wishlist_id=wishlist.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="delete" value="{{ producto.id }}">
+          <button type="submit" class="btn botoncito-danger btn-outline-personal">Eliminar</button>
+        </form>
+      </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <th>{{ wishlist.valor_total }}</th>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+</div>
+<a href="#" class="btn botoncito-danger btn-outline-personal">Hacer Pedido</a>
+{% endblock %}

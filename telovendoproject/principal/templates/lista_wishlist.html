@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Wishlists de {{ cliente.nombre}} {% endblock %}
+
+{% block body %}
+
+
+<div class="row align-items-center">
+  <div class="d-flex justify-content-center py-3">
+    <h3 class="titulo">Wishlist de {{ cliente.nombre}} </h3>
+  </div>
+
+  <div class="col-12 d-flex justify-content-end py-4">
+    <form method="POST" class="form-container blog mb-4">
+      <h3 class="titulo">Crear Wishlist</h3>
+      {% csrf_token %}
+    {{ wishlist_form.as_p }}
+    <input type="submit" name="crear_wishlist" class="btn botoncito btn-personal" value="Crear">
+    </form>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Cantidad de productos</th>
+        <th>Valor total</th>
+        <th>Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lista in wishlists %}
+      <tr>
+        <td>{{ lista.nombre_wishlist }}</td>
+        <td>{{ lista.total_productos }}</td>
+        <td>{{ lista.valor_total }}</td>
+        <td><a href="{% url 'wishlist_detalle' lista.id %}" class="btn btn-outline-personal">Detalles</a></td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">
+          <div class="alert alert-danger" role="alert">
+            No hay wishlists creadas
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -10,7 +10,7 @@
 <!-- Todos los usuarios logeados-->
 
 <img class="img-titulo" src="{% static 'assets/imagenes/tlv.png' %}" alt="telovendoasdasa">
-<h1 id="bienvenida">¡Que gusto verte! {{ user }} </h1>
+<h1 id="bienvenida">¡Que gusto verte! {{ cliente.nombre }} </h1>
 
 {% if user.is_active and user.is_staff %}
 

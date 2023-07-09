@@ -38,7 +38,7 @@
       </ul>
 
       <p>Valor total productos: ${{ subtotal }}</p>
-
+      {% if user.is_staff %}
       <form method="post" class="text-center">
         {% csrf_token %}
         <div class="d-flex justify-content-center">
@@ -46,6 +46,14 @@
           <input type="submit" name="continuar" class="btn-form btn btn-primary ml-2" value="Continuar">
         </div>
       </form>
+      {% else %}
+      <form method="post" class="text-center">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center">
+          <input type="submit" name="guardar_wishlist" class="btn-form btn btn-primary ml-2" value="guardar">
+        </div>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>
