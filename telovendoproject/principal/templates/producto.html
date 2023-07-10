@@ -4,7 +4,13 @@
 {% block title %}TeLoVendo - Inicio{% endblock %}
 
 {% block body %}
-
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <div class="container">
     <div class="row">
         <div class="col col-sm-4">
@@ -31,5 +37,14 @@
                             {{ producto.descripcion }}
                         </li>
                     </ul>
-
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ agregar_producto_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Agregar a Wishlist</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock  %}

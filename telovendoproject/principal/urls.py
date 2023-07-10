@@ -21,14 +21,9 @@ urlpatterns = [
     path('contacto/', ContactView.as_view(), name="contacto"),
     path('mis_wishlist/', ListaWishListView.as_view(), name="user_wishlist"),
     path('wishlist_detalle/<int:wishlist_id>/', WishlistDetalleView.as_view(), name="wishlist_detalle"),
-
-# Grupal 5: vistas para crear el pedido del usuario registrado
-
-    #path('pedido_cliente', CreatePedidoView.as_view(), name='pedido_cliente'),
-    #path('detalle/<int:pedido_id>/', views.DetallePedidoView.as_view(), name='detalle_pedido'),
-    #path('carrito/', views.CarritoCompraView.as_view(), name='carrito_compra'),
-    #path('confirmar/', views.ConfirmarCompraView.as_view(), name='confirmar_compra'),
-    #path('pago/', views.MetodoPagoView.as_view(), name='metodo_pago'),
+    path('pedido_detalle/<int:pk>/', PedidoDetalleView.as_view(), name="pedido_detalle"),
+    path('pedido_detalle_ext/<int:pk>/', PedidoDetalleView.as_view(), name="pedido_detalle_externo"),
+    path('pedido_usuario/<int:wishlist_id>/<int:cliente_id>', CrearPedidoUsuarioView.as_view(), name="pedido_usuario"),
 ]
 
 

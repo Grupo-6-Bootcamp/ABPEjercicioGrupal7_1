@@ -1,5 +1,6 @@
 {% extends "base.html" %} 
 {% load static %} 
+{% load humanize %}
 
 {% block title %}Gestión de productos{% endblock %} 
 
@@ -31,7 +32,7 @@
             <img src="media/images/producto_default.png" width="100" height="auto">
           </td>
           <td>{{ producto.nombre }}</td>
-          <td class="valor-unitario text-center" >{{ producto.valor_unit }}</td>
+          <td class="valor-unitario text-center" >${{ producto.valor_unit|intcomma }}</td>
           <td>{{ producto.descripcion }}</td>
           <td class="text-center">{{ producto.stock }}</td>
         </tr>

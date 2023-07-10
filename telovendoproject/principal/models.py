@@ -40,7 +40,7 @@ class Wishlist(models.Model):
     productos = models.ManyToManyField(Producto, through='ProductoWishlist')
 
     def __str__(self):
-        return self.idcliente
+        return str(self.nombre_wishlist)
     
     def total_productos(self):
         cantidad = 0

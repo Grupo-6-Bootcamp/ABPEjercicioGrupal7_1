@@ -58,5 +58,14 @@
   </table>
   
 </div>
-<a href="#" class="btn botoncito-danger btn-outline-personal">Hacer Pedido</a>
+<!-- go to pay button-->
+<form method="POST">
+  {% csrf_token %}
+{% comment %} <a href="{% url 'pedido_detalle_ext' pk=pedido.id %}" class="btn botoncito-danger btn-outline-personal">Hacer Pedido</a> {% endcomment %}
+<input type="submit" name="comprar" class="btn-form btn btn-primary ml-2" value="Comprar">
+</form>
+
+
 {% endblock %}
+
+

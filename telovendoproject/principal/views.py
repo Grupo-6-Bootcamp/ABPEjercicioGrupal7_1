@@ -1,11 +1,10 @@
 import contextlib
-import datetime
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from .models import Producto, Pedido, ProductoWishlist, Wishlist, Detalle, Cliente
-from .forms import ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm, PedidoForm, ClienteExternoForm #DetalleForm
+from .forms import AgregarProductoForm, ClienteForm, EstadoPedidoForm, ProductoForm, ProductoWishlistForm, WishlistForm, PedidoForm, ClienteExternoForm, PedidoExternoForm, PedidoUsuarioForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
@@ -15,6 +14,9 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from datetime import datetime, timedelta
+from django.core.mail import send_mail
+from django.conf import settings
 
 User = get_user_model()
 
@@ -22,26 +24,50 @@ User = get_user_model()
 
 class IndexView(View):
     def get(self, request):
-        user = User.objects.get(id=request.user.id)
-        context = {"user": user}
+        context = {}
+        try:
+            user = User.objects.get(id=request.user.id)
+            context["user"] = user
+        except User.DoesNotExist:
+            pass
         try:
             cliente = Cliente.objects.get(idusuario=user)
             context["cliente"] = cliente
-        except Cliente.DoesNotExist:
+        except:
             pass
         return render(request, "index.html", context)
 
-@method_decorator(staff_member_required, name='dispatch')
+ 
 class PedidosView(View):
     template_name = 'pedidos.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.get(id=request.user.id)
+        if request.user.is_staff:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            try: 
+                self.cliente = Cliente.objects.get(idusuario=self.usuario)
+            except Cliente.DoesNotExist:
+                alert = "Si desea acceder a la wishlist, primero debe registrar sus datos como cliente"
+                messages.error(request, alert)
+                return redirect("panel_usuario")
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
-        pedidos = Pedido.objects.all()
+        #Si el usuario es staff, puede ver todos los pedidos
+        #en caso contrario, solo renderizara los pedidos del usuario
+        if request.user.is_staff:
+            pedidos = Pedido.objects.all()
+        else:
+            pedidos = Pedido.objects.filter(wishlist__idcliente=self.cliente)
+            # pedidos = Pedido.objects.filter(wishlist__idcliente=request.user)
         context = {'pedidos': pedidos}
         return render(request, self.template_name, context=context)
 
 
-class GestionProdView(View):
+@method_decorator(staff_member_required, name='dispatch')
+class GestionProdView(View, LoginRequiredMixin):
     template_name = 'gestion_prod.html'
 
     def get(self, request, *args, **kwargs):
@@ -50,7 +76,8 @@ class GestionProdView(View):
         return render(request, self.template_name, context=context)
 
 ## Ingresar productos como staff
-class IngresoProductoView(View):
+@method_decorator(staff_member_required, name='dispatch')
+class IngresoProductoView(View, LoginRequiredMixin):
     template_name = 'nuevo_producto.html'
 
     def get(self, request):
@@ -70,7 +97,8 @@ def test01(request):
     return render(request, "ecommerce/index.html")
 
 ## Crear cliente y su wishlist como staff
-class CrearClienteView(View):
+@method_decorator(staff_member_required, name='dispatch')
+class CrearClienteView(View, LoginRequiredMixin):
     template_name = 'crear_cliente.html'
 
     def get(self, request):
@@ -97,7 +125,7 @@ class CrearClienteView(View):
         return redirect('agregar_productos_wishlist', wishlist_id=wishlist.id)
 
 ## Agrega productos a la wishlist recien creada como staff
-class AgregarProductosWishlistView(View):
+class AgregarProductosWishlistView(View, LoginRequiredMixin):
     template_name = 'agregar_productos_wishlist.html'
 
     def calculate_subtotal(self, productos_wishlist):
@@ -138,8 +166,18 @@ class AgregarProductosWishlistView(View):
         if form.is_valid():
             producto_wishlist = form.save(commit=False)
             wishlist = Wishlist.objects.get(id=wishlist_id)
-            producto_wishlist.idwishlist = wishlist
-            producto_wishlist.save()
+            producto = producto_wishlist.idproducto
+            existing_product_wishlist = ProductoWishlist.objects.filter(
+                idwishlist=wishlist,
+                idproducto=producto
+            ).first()
+
+            if existing_product_wishlist:
+                existing_product_wishlist.cantidad_deseada += producto_wishlist.cantidad_deseada
+                existing_product_wishlist.save()
+            else:
+                producto_wishlist.idwishlist = wishlist
+                producto_wishlist.save()
             return redirect('agregar_productos_wishlist', wishlist_id=wishlist_id)
 
         wishlist = Wishlist.objects.get(id=wishlist_id)
@@ -156,7 +194,7 @@ class AgregarProductosWishlistView(View):
 
 
 ## Crear pedido como staff
-class CrearPedidoView(View):
+class CrearPedidoView(View,LoginRequiredMixin):
     template_name = "crear_pedido.html"
     form_class = PedidoForm
     reverse_lazy = "pedidos"
@@ -169,12 +207,12 @@ class CrearPedidoView(View):
             idwishlist=wishlist)
         subtotal = self.calculate_subtotal(productos_wishlist)
         valordespacho = 0
-        if valordespacho < 50000:
+        if subtotal < 50000:
             valordespacho = 5990
         valortotal = valordespacho + subtotal
         form = self.form_class(
             initial={'wishlist': wishlist, 
-                     'subtotal': subtotal,
+                    'subtotal': subtotal,
                     'valordespacho': valordespacho,
                     'valortotal': valortotal})
         context = {
@@ -230,8 +268,85 @@ class CrearPedidoView(View):
             detalle.valor_unit = producto.valor_unit 
             detalle.save()
 
+## Crear pedido como usuario
+class CrearPedidoUsuarioView(View, LoginRequiredMixin):
+    template_name = "crear_pedido.html"
+    form_class = PedidoUsuarioForm
+    reverse_lazy = "pedido_detalle"
 
-class PedidosList(ListView):
+    def get(self, request, wishlist_id, cliente_id):
+        # get subtotal from agregar_productos_wishlist
+        wishlist = Wishlist.objects.get(id=wishlist_id)
+        cliente = Cliente.objects.get(id=cliente_id)
+        productos_wishlist = ProductoWishlist.objects.filter(
+            idwishlist=wishlist)
+        subtotal = self.calculate_subtotal(productos_wishlist)
+        if subtotal < 50000:
+            valordespacho = 5990
+        else:
+            valordespacho = 0
+        valortotal = valordespacho + subtotal
+        form = self.form_class(
+            initial={'wishlist': wishlist, 
+                    'subtotal': subtotal,
+                    'valordespacho': valordespacho,
+                    'valortotal': valortotal})
+        context = {
+            'form': form,
+            'wishlist': wishlist,
+            'subtotal': subtotal,
+            'cliente': cliente
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, wishlist_id, cliente_id):
+        form = self.form_class(request.POST)
+        wishlist = Wishlist.objects.get(id=wishlist_id)
+        productos_wishlist = wishlist.productos.through.objects.filter(idwishlist=wishlist)
+        if form.is_valid():
+            pedido = form.save()
+            pedido.wishlist_id = wishlist
+            pedido.save()
+            self.crear_detalle(wishlist, pedido)
+            pedido_detalle = pedido.id
+            return redirect(self.reverse_lazy , pedido_detalle)
+        else:
+            print(form.errors)
+
+        wishlist = Wishlist.objects.get(id=wishlist_id)
+        cliente = Cliente.objects.get(id=cliente_id)
+        productos_wishlist = ProductoWishlist.objects.filter(
+            idwishlist=wishlist)
+        subtotal = self.calculate_subtotal(productos_wishlist)
+        
+        context = {
+            'form': form,
+            'wishlist': wishlist,
+            'subtotal': subtotal,
+            'cliente': cliente
+        }
+        return render(request, self.template_name, context)
+        
+    def calculate_subtotal(self, productos_wishlist):
+        return sum(
+            producto_wishlist.idproducto.valor_unit
+            * producto_wishlist.cantidad_deseada
+            for producto_wishlist in productos_wishlist
+        )
+
+    def crear_detalle(self, wishlist, pedido):
+        productos_wishlist = wishlist.productos.through.objects.filter(idwishlist=wishlist)
+        for producto_wishlist in productos_wishlist:
+            producto = producto_wishlist.idproducto
+            cantidad_deseada = producto_wishlist.cantidad_deseada
+            detalle = Detalle()
+            detalle.pedido = pedido 
+            detalle.productos = producto 
+            detalle.cantidad = cantidad_deseada 
+            detalle.valor_unit = producto.valor_unit 
+            detalle.save()
+
+class PedidosList(ListView, LoginRequiredMixin):
     model = Pedido
     context_object_name = 'pedidos'
     template_name = 'pedidos.html'
@@ -370,11 +485,13 @@ class WishlistDetalleView(TemplateView, LoginRequiredMixin):
             wishlist_id = request.POST.get('delete_wishlist')
             Wishlist.objects.get(id=wishlist_id).delete()
             return redirect('user_wishlist')
+        if request.POST.get('comprar'):
+            return redirect('pedido_usuario', wishlist_id=wishlist_id, cliente_id=wishlist.idcliente.id)
 
+     
 
 class PanelUsuario(View, LoginRequiredMixin):
     form = ClienteForm
-
     def get(self, request):
         usuario = User.objects.get(id=request.user.id)
         form = self.form(initial={'email': usuario.email})
@@ -413,18 +530,61 @@ class ProductList(ListView):
         return super().get_queryset()
 
 
-class ProductDetail(DetailView):
-    model = Producto
-    context_object_name = 'producto'
+class ProductDetail(View):
     template_name = 'producto.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        producto = self.object
-        nombre = producto.nombre
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.usuario = request.user
+        except User.DoesNotExist:
+            pass
+        try: 
+            self.cliente = Cliente.objects.get(idusuario=self.usuario)
+        except:
+            pass
+        try: 
+            self.wishlists = Wishlist.objects.filter(idcliente=self.cliente)
+        except:
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, pk):
+        producto = get_object_or_404(Producto, pk=pk)
         valor_unit = producto.valor_unit
-        context['valor_unit'] = valor_unit
-        return context
+        agregar_producto_form = AgregarProductoForm(cliente=self.cliente)
+        context = {
+            'producto': producto,
+            'valor_unit': valor_unit,
+            'agregar_producto_form': agregar_producto_form,
+        }
+        return render(request, self.template_name, context)
+
+
+    def post(self, request, pk):
+        producto = get_object_or_404(Producto, pk=pk)
+        agregar_producto_form = AgregarProductoForm(request.POST, cliente=self.cliente)
+
+        if agregar_producto_form.is_valid():
+            cantidad_deseada = agregar_producto_form.cleaned_data['cantidad']
+            wishlist_seleccionada = agregar_producto_form.cleaned_data['wishlist']
+            producto_wishlist, created = ProductoWishlist.objects.get_or_create(
+                idwishlist=wishlist_seleccionada,
+                idproducto=producto,
+                defaults={'cantidad_deseada': cantidad_deseada}
+            )
+            if not created:
+                producto_wishlist.cantidad_deseada += cantidad_deseada
+                producto_wishlist.save()
+            alert = "Producto agregado con éxito a la wishlist"
+            messages.success(request, alert)
+            return redirect('producto', pk=pk)
+
+        context = {
+            'producto': producto,
+            'valor_unit': producto.valor_unit,
+            'agregar_producto_form': agregar_producto_form,
+        }
+        return render(request, self.template_name, context)
 
 
 class ContactView(View):
@@ -433,106 +593,8 @@ class ContactView(View):
     
 ## Ejercicio Grupal 5
 ## Permitirá que los usuarios generales puedan registrar nuevos pedidos asociados a ellos como clientes.
-#
-## Vista que permite crear el pedido 
-#class CreatePedidoView(View):
-#    form_class = PedidoForm
-#    template_name = 'pedido_cliente_registrado.html'
-#
-#    def get(self, request):
-#        pedido_form = PedidoForm()
-#        detalle_form = DetalleForm()
-#        return render(request, 'crear_pedido.html', {'pedido_form': pedido_form, 'detalle_form': detalle_form})
-#
-#    def post(self, request):
-#        pedido_form = PedidoForm(request.POST)
-#        detalle_form = DetalleForm(request.POST)
-#        
-#        if pedido_form.is_valid() and detalle_form.is_valid():
-#            pedido = pedido_form.save()
-#            detalle = detalle_form.save(commit=False)
-#            detalle.pedido = pedido
-#            detalle.save()
-#            return redirect('detalle_pedido', pedido_id=pedido.id)
-#        return render(request, 'crear_pedido.html', {'pedido_form': pedido_form, 'detalle_form': detalle_form})
-#
-#
-##  Vista para agregar productos al carro de compras
-#class AgregarProductoView(View):
-#    def post(self, request, pedido_id):
-#        pedido = Pedido.objects.get(id=pedido_id)
-#        form = DetalleForm(request.POST)
-#        if form.is_valid():
-#            detalle = form.save(commit=False)
-#            detalle.pedido = pedido
-#            detalle.save()
-#            return redirect('detalle_pedido', pedido_id=pedido.id)
-#        return render(request, 'detalle_pedido.html', {'pedido': pedido, 'form': form})
-#
-##  Vista del detalle del carrito de compras
-#class CarritoCompraView(View):
-#    def get(self, request):
-#        # Obtener los productos agregados al carrito del usuario
-#        carrito = request.session.get('carrito', {})
-#        productos = []
-#        total = 0
-#
-#        # Obtener información de los productos agregados al carrito
-#        for producto_id, cantidad in carrito.items():
-#            producto = Producto.objects.get(pk=producto_id)
-#            subtotal = producto.valor_unit * cantidad
-#            total += subtotal
-#            productos.append({
-#                'producto': producto,
-#                'cantidad': cantidad,
-#                'subtotal': subtotal
-#            })
-#
-#        context = {
-#            'productos': productos,
-#            'total': total
-#        }
-#
-#        return render(request, 'carrito_compra.html', context)
-#
-#    def post(self, request):
-#        # Obtener los productos agregados al carrito del usuario
-#        carrito = request.session.get('carrito', {})
-#        productos = []
-#
-#        # Crear un nuevo pedido
-#        pedido = Pedido()
-#        pedido.save()
-#
-#        # Guardar los detalles de los productos en el pedido
-#        for producto_id, cantidad in carrito.items():
-#            producto = Producto.objects.get(pk=producto_id)
-#            subtotal = producto.valor_unit * cantidad
-#
-#            detalle = Detalle(
-#                pedido=pedido,
-#                producto=producto,
-#                cantidad=cantidad,
-#                valor_unit=producto.valor_unit,
-#            )
-#            detalle.save()
-#
-#            productos.append({
-#                'producto': producto,
-#                'cantidad': cantidad,
-#                'subtotal': subtotal
-#            })
-#
-#        # Limpiar el carrito
-#        request.session['carrito'] = {}
-#
-#        context = {
-#            'pedido': pedido,
-#            'productos': productos
-#        }
-#
-#        return redirect('confirmar_compra')
-#
+
+
 ## Vista para confirmar datos y pasar al pago 
 #class ConfirmarCompraView(View):
 #    def get(self, request):
@@ -590,3 +652,65 @@ class ContactView(View):
 #
 #        return redirect('exito_compra')
 #
+
+# Grupal 6. Detalle del pedido ingresado
+
+class PedidoDetalleView(View):
+    template_name = 'detalle_pedido.html'
+    def dispatch(self, request, *args, **kwargs):
+        self.usuario = User.objects.get(id=request.user.id)
+        if request.user.is_staff:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            try: 
+                self.cliente = Cliente.objects.get(idusuario=self.usuario)
+            except Cliente.DoesNotExist:
+                alert = "Por favor agregué sus datos como cliente"
+                messages.error(request, alert)
+                return redirect("panel_usuario")
+        self.pk = kwargs.get('pk')
+        pedido = get_object_or_404(Pedido, pk=self.pk)
+        if pedido.wishlist.idcliente == self.cliente:
+            pass
+        else:
+            alert = "No tienes permiso para acceder a ese detalle"
+            messages.error(request, alert)
+            return redirect("panel_usuario")
+        return super().dispatch(request, *args, **kwargs)
+   
+
+    def get(self, request, pk):
+        pedido = get_object_or_404(Pedido, pk=pk)
+        context = {'pedido': pedido}
+        try:
+            detalle = Detalle.objects.filter(pedido=pedido)
+            print("detalles  ", detalle)
+            context["detalle"] = detalle 
+        except Detalle.DoesNotExist:
+            pass
+        if request.user.is_staff:
+            form = EstadoPedidoForm(instance=pedido, request=request)
+            context["form"] = form
+        else:
+             pass
+        return render(request, 'detalle_pedido.html', context)
+
+    def post(self, request, pk):
+        pedido = get_object_or_404(Pedido, pk=pk)
+        form = EstadoPedidoForm(request.POST, instance=pedido,request=request)
+        if form.is_valid():
+            pedido = form.save(commit=False)
+            pedido.estadopedido = form.cleaned_data['estadopedido']
+            #get the user from pedido_id and send email
+            user = pedido.wishlist.idcliente.idusuario
+            send_mail(
+                'Estado de pedido',
+                'El estado de su pedido ha cambiado a: ' + pedido.estadopedido,
+                settings.EMAIL_HOST_USER,
+                [user.email],	
+                fail_silently=False,
+            )
+            print("[DEBUG] ", user.email)
+            pedido.save()
+            return redirect('pedidos')
+
