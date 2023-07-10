@@ -41,21 +41,23 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return str(self.nombre_wishlist)
-    
+
     def total_productos(self):
         cantidad = 0
         producto_wishlists = ProductoWishlist.objects.filter(idwishlist=self)
         for producto in producto_wishlists:
             cantidad += producto.cantidad_deseada
         return cantidad
-    
+
     def valor_total(self):
         total = 0
         producto_wishlists = ProductoWishlist.objects.filter(idwishlist=self)
         for producto_wishlist in producto_wishlists:
-            valor = producto_wishlist.cantidad_deseada * producto_wishlist.idproducto.valor_unit
+            valor = producto_wishlist.cantidad_deseada * \
+                producto_wishlist.idproducto.valor_unit
             total += valor
         return total
+
 
 class ProductoWishlist(models.Model):
     idwishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
@@ -64,7 +66,7 @@ class ProductoWishlist(models.Model):
 
     def __str__(self):
         return f"Wishlist: {self.idwishlist} - {self.idwishlist.idcliente.nombre}"
-    
+
     def valor_total(self):
         return self.cantidad_deseada * self.idproducto.valor_unit
 
@@ -80,6 +82,7 @@ class Pedido(models.Model):
         ('En preparacion', 'En preparación'),
         ('Entregado', 'Entregado'),
         ('En Despacho', 'En Despacho'),
+        ('Cancelado', 'Cancelado'),
     ]
 
     wishlist = models.ForeignKey(
@@ -104,7 +107,6 @@ class Detalle(models.Model):
     productos = models.ForeignKey(Producto, on_delete=models.PROTECT)
     cantidad = models.PositiveIntegerField(null=False)
     valor_unit = models.PositiveIntegerField(null=False)
-
 
     def cantidad_valor(self):
         return self.cantidad * self.valor_unit

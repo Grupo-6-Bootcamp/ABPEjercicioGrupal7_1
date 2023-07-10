@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ wishlist.nombre_wishlist }} {% endblock %}
 
@@ -12,7 +13,7 @@
   </div>
 
   <div class="col-12 d-flex justify-content-end py-4">
-    <a href="{% url 'agregar_productos_wishlist' wishlist.id %}" class="btn botoncito btn-outline-personal" role="button">Agregar Productos</a>
+    <a href="{% url 'productos' %}" class="btn botoncito btn-outline-personal" role="button">Agregar Productos</a>
     <form method="post" action="{% url 'wishlist_detalle' wishlist_id=wishlist.id %}">
       {% csrf_token %}
       <input type="hidden" name="delete_wishlist" value="{{ wishlist.id }}">
@@ -37,7 +38,7 @@
         <td>{{ producto.idproducto }}</td>
         <td>{{ producto.cantidad_deseada }}</td>
         <td>{{ producto.idproducto.valor_unit }}</td>
-        <th>{{ producto.valor_total }}</th>
+        <th>${{ producto.valor_total|intcomma }}</th>
         <td>
           <form method="post" action="{% url 'wishlist_detalle' wishlist_id=wishlist.id %}">
           {% csrf_token %}

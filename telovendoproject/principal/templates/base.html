@@ -50,7 +50,7 @@
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="nav-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
+                <li><a class="dropdown-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
               </ul>
 
           </div>
@@ -94,16 +94,9 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="nav-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
+            <li><a class="dropdown-item logclass" href="{% url 'logout' %}">Salir de mi cuenta</a></li>
           </ul>
           </li>
-          <li class="nav-item">
-            <a href="#">
-              <img style="width:35px; " id="cart-icon" src="{% static 'assets/imagenes/cart.png' %}">
-              <!--<p id="cart-total">{{cartItems}}</p>-->
-            </a>
-          </li>
-
           {% endif %}
         </ul>
       </div>
