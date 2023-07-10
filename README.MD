@@ -10,7 +10,7 @@ Cada entregable de este proyecto será instanciado en una rama con el nombre del
 
       Los usuarios generales pueden entrar a la ventana wishlist a través del navbar, una vez dentro pueden crear una wishlist e ingresar a esta para agregar productos a su wishlist.
 
-      Al seleccionar el boton "comprar" este pasa a la ventana para registrar su pedido, donde indica direccion de entrega y fecha de pago.
+      Al seleccionar el boton "comprar" este pasa a la ventana para registrar su pedido, donde deberá indicar direccion de entrega y fecha de pago.
       La fecha límite de despacho o fecha de vencimiento, cuenta nueve días desde el día actual de forma automática y el pedido queda registrado como pendiente.
 
 # Usuarios
