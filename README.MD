@@ -4,6 +4,9 @@ Cynthia Abarca, Álvaro Manterola, Guido Saavedra, Esteban Santibáñez
 
 Cada entregable de este proyecto será instanciado en una rama con el nombre del aprendizaje correspondiente.
 
+- RFW-003. Permitirá que los usuarios generales puedan registrar nuevos pedidos asociados a ellos como clientes.
+
+
 # Usuarios
 
 Para el login se configuró el email en lugar del username.
