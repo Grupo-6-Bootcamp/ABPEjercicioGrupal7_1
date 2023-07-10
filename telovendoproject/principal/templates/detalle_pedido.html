@@ -12,7 +12,11 @@
       {% csrf_token %}
       <div class="row align-items-center">
         <div class="d-flex justify-content-center py-3">
-          <h3 class="titulo">Detalle del pedido # {{pedido.id}}</h3>
+          {% if user.is_staff %}
+          <h3 class="titulo">Detalle del pedido # S{{pedido.id}}</h3>
+          {% else%}
+          <h3 class="titulo">Detalle del pedido # C{{pedido.id}}</h3>
+          {% endif %}
         </div>
         <div class="col-md-6">
           <label class="form-label">Nombre cliente:</label>

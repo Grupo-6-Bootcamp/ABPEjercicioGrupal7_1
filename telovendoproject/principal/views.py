@@ -236,7 +236,7 @@ class CrearPedidoView(View, LoginRequiredMixin):
             'form': form,
             'wishlist': wishlist,
             'subtotal': subtotal,
-            'cliente': cliente
+            'cliente': cliente,
         }
         return render(request, self.template_name, context)
 
@@ -263,7 +263,7 @@ class CrearPedidoView(View, LoginRequiredMixin):
             'form': form,
             'wishlist': wishlist,
             'subtotal': subtotal,
-            'cliente': cliente
+            'cliente': cliente,
         }
         return render(request, self.template_name, context)
 
